@@ -1,9 +1,8 @@
-'use strict';
+`use strict`;
 
 const MOVIE_CARD_COUNT = 5;
 const EXTRA_LIST_COUNT = 2;
 const EXTRA_MOVIE_CARD_COUNT = 2;
-const EXTRA_TITLE = ['Top rated', 'Most commented'];
 
 // создаем шаблон ранга пользователя
 
@@ -306,10 +305,10 @@ const render = (container, template, place = `beforeend`) => {
 
 // основные элементы сайта
 
-const siteBody = document.querySelector('body');
-const siteHeader = siteBody.querySelector('.header');
+const siteBody = document.querySelector(`body`);
+const siteHeader = siteBody.querySelector(`.header`);
 const siteMainElement = siteBody.querySelector(`.main`);
-const filmsStatisticContainer = siteBody.querySelector('.footer__statistics');
+const filmsStatisticContainer = siteBody.querySelector(`.footer__statistics`);
 
 // рендерим шаблоны
 
@@ -321,16 +320,16 @@ render(filmsStatisticContainer, createFilmsStatisticTemplate());
 
 // дополнительные элементы сайта
 
-const filmsContent = siteMainElement.querySelector('.films');
+const filmsContent = siteMainElement.querySelector(`.films`);
 
 render(filmsContent, createFilmsListTemplate());
 
-const filmsList = filmsContent.querySelector('.films-list');
+const filmsList = filmsContent.querySelector(`.films-list`);
 
 render(filmsList, createFilmsListContainerTemplate());
 render(filmsList, createShowMoreButtonTemplate());
 
-const filmListContainer =  filmsList.querySelector('.films-list__container');
+const filmListContainer = filmsList.querySelector(`.films-list__container`);
 
 for (let i = 0; i < MOVIE_CARD_COUNT; i++) {
   render(filmListContainer, createFilmCardTemplate());
@@ -342,17 +341,17 @@ for (let i = 0; i < EXTRA_LIST_COUNT; i++) {
   render(filmsContent, createFilmListTemplate());
 }
 
-const filmsExtraListContainer = filmsContent.querySelectorAll('.films-list--extra');
+const filmsExtraListContainer = filmsContent.querySelectorAll(`.films-list--extra`);
 
 // перебираем два дополнительных контейнера и рендерим в них доп. контейнеры
 
-filmsExtraListContainer.forEach((item) => {
+filmsExtraListContainer.forEach((list) => {
 
-  render(item, createFilmsListContainerTemplate());
+  render(list, createFilmsListContainerTemplate());
 
   // находим контейнеры внутри каждого листа
 
-  const extraFilmsListContainers = item.querySelectorAll('.films-list__container');
+  const extraFilmsListContainers = list.querySelectorAll(`.films-list__container`);
 
   // рендерим в контейнеры две карточки фильма
 
@@ -365,6 +364,6 @@ filmsExtraListContainer.forEach((item) => {
 
 render(siteBody, createFilmDetailContainerTemplate());
 
-const detailFilmContainer = siteBody.querySelector('.film-details');
+const detailFilmContainer = siteBody.querySelector(`.film-details`);
 
 render(detailFilmContainer, createFilmDetailCardTemplate());
