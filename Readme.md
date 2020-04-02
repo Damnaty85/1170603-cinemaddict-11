@@ -1,7 +1,7 @@
 # Личный проект «Киноман» [![Build status][travis-image]][travis-url]
 
 * Студент: [Антон Куринной](https://up.htmlacademy.ru/ecmascript/11/user/1170603).
-* Наставник: `Неизвестно`.
+* Наставник: [Данил Чушко](https://htmlacademy.ru/profile/flatdesign).
 
 ---
 
