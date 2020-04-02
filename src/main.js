@@ -1,4 +1,4 @@
-`use strict`;
+'use strict';
 
 const MOVIE_CARD_COUNT = 5;
 const EXTRA_LIST_COUNT = 2;
