@@ -4,8 +4,6 @@ const MOVIE_CARD_COUNT = 5;
 const EXTRA_LIST_COUNT = 2;
 const EXTRA_MOVIE_CARD_COUNT = 2;
 
-// создаем шаблон ранга пользователя
-
 const createUserRankTemplate = () => {
   return (`
     <section class="header__profile profile">
@@ -14,8 +12,6 @@ const createUserRankTemplate = () => {
     </section>
   `);
 };
-
-// Создаем шаблон меню
 
 const createMainNavigationTemplate = () => {
   return (`
@@ -31,8 +27,6 @@ const createMainNavigationTemplate = () => {
   `);
 };
 
-// Создаем шаблон сортировки
-
 const createMainSortTemplate = () => {
   return (`
     <ul class="sort">
@@ -43,39 +37,25 @@ const createMainSortTemplate = () => {
   `);
 };
 
-// Создаем шаблон контента
-
 const createContentTemplate = () => {
   return (`
     <section class="films"></section>
   `);
 };
 
-// Создаем шаблон контейнера для списка фильмов и кнопки
-
-const createFilmsListTemplate = () => {
+const createFilmsListTemplate = (extra = '') => {
   return (`
-    <section class="films-list"></section>
+    <section class="films-list${extra}">
+        <div class="films-list__container"></div>
+    </section>
   `);
 };
-
-// Создаем шаблон кнопки показать еще
 
 const createShowMoreButtonTemplate = () => {
   return (`
     <button class="films-list__show-more">Show more</button>
   `);
 };
-
-// шаблон контейнера для карточек
-
-const createFilmsListContainerTemplate = () => {
-  return (`
-    <div class="films-list__container"></div>
-  `);
-};
-
-// шаблон контейнера для карточек
 
 const createFilmCardTemplate = () => {
   return (`
@@ -99,31 +79,17 @@ const createFilmCardTemplate = () => {
   `);
 };
 
-// шаблон экстра списка фильмов
-
-const createFilmListTemplate = () => {
-  return (`
-<section class="films-list--extra"></section>
-  `);
-};
-
-// шаблон экстра списка фильмов
-
-const createFilmsStatisticTemplate = () => {
+const createFooterStatisticTemplate = () => {
   return (`
     <p>130 291 movies inside</p>
   `);
 };
-
-// шаблон контейнера детальной
 
 const createFilmDetailContainerTemplate = () => {
   return (`
     <section class="film-details"></section>
   `);
 };
-
-// шаблон детальной карточки фильма
 
 const createFilmDetailCardTemplate = () => {
   return (`
@@ -297,28 +263,20 @@ const createFilmDetailCardTemplate = () => {
   `);
 };
 
-// функция рендера
-
 const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
 };
-
-// основные элементы сайта
 
 const siteBody = document.querySelector(`body`);
 const siteHeader = siteBody.querySelector(`.header`);
 const siteMainElement = siteBody.querySelector(`.main`);
 const filmsStatisticContainer = siteBody.querySelector(`.footer__statistics`);
 
-// рендерим шаблоны
-
 render(siteHeader, createUserRankTemplate());
 render(siteMainElement, createMainNavigationTemplate());
 render(siteMainElement, createMainSortTemplate());
 render(siteMainElement, createContentTemplate());
-render(filmsStatisticContainer, createFilmsStatisticTemplate());
-
-// дополнительные элементы сайта
+render(filmsStatisticContainer, createFooterStatisticTemplate());
 
 const filmsContent = siteMainElement.querySelector(`.films`);
 
@@ -326,7 +284,6 @@ render(filmsContent, createFilmsListTemplate());
 
 const filmsList = filmsContent.querySelector(`.films-list`);
 
-render(filmsList, createFilmsListContainerTemplate());
 render(filmsList, createShowMoreButtonTemplate());
 
 const filmListContainer = filmsList.querySelector(`.films-list__container`);
@@ -335,25 +292,14 @@ for (let i = 0; i < MOVIE_CARD_COUNT; i++) {
   render(filmListContainer, createFilmCardTemplate());
 }
 
-// рендерим два дополнительных списка
-
 for (let i = 0; i < EXTRA_LIST_COUNT; i++) {
-  render(filmsContent, createFilmListTemplate());
+  render(filmsContent, createFilmsListTemplate('--extra'));
 }
 
 const filmsExtraListContainer = filmsContent.querySelectorAll(`.films-list--extra`);
 
-// перебираем два дополнительных контейнера и рендерим в них доп. контейнеры
-
 filmsExtraListContainer.forEach((list) => {
-
-  render(list, createFilmsListContainerTemplate());
-
-  // находим контейнеры внутри каждого листа
-
   const extraFilmsListContainers = list.querySelectorAll(`.films-list__container`);
-
-  // рендерим в контейнеры две карточки фильма
 
   extraFilmsListContainers.forEach((item) => {
     for (let i = 0; i < EXTRA_MOVIE_CARD_COUNT; i++) {
