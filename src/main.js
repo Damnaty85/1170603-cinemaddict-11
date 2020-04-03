@@ -43,7 +43,7 @@ const createContentTemplate = () => {
   `);
 };
 
-const createFilmsListTemplate = (extra = '') => {
+const createFilmsListTemplate = (extra = ``) => {
   return (`
     <section class="films-list${extra}">
         <div class="films-list__container"></div>
@@ -293,7 +293,7 @@ for (let i = 0; i < MOVIE_CARD_COUNT; i++) {
 }
 
 for (let i = 0; i < EXTRA_LIST_COUNT; i++) {
-  render(filmsContent, createFilmsListTemplate('--extra'));
+  render(filmsContent, createFilmsListTemplate(`--extra`));
 }
 
 const filmsExtraListContainer = filmsContent.querySelectorAll(`.films-list--extra`);
