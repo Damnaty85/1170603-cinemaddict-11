@@ -8,10 +8,18 @@ import {createFilmCardTemplate} from "./components/film-card";
 import {createFooterStatisticTemplate} from "./components/statistic";
 import {createFilmDetailContainerTemplate} from "./components/detail-container";
 import {createFilmDetailCardTemplate} from "./components/film-card_detail";
+import {createCommentTemplate} from "./components/comment";
+import {generateNavigations} from "./mock/navigation";
+import {generateSorts} from "./mock/sort";
+import {generateCards} from "./mock/card";
+import {generateComments} from "./mock/comment";
 
-const MOVIE_CARD_COUNT = 5;
+const MOVIE_CARD_COUNT = 25;
+const SHOWING_MOVIE_CARD_COUNT_ON_START = 5;
+const SHOWING_MOVIE_CARD_COUNT_BY_BUTTON = 5;
 const EXTRA_LIST_COUNT = 2;
 const EXTRA_MOVIE_CARD_COUNT = 2;
+const COMMENT_COUNT = 5;
 
 const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
@@ -22,9 +30,12 @@ const siteHeader = siteBody.querySelector(`.header`);
 const siteMainElement = siteBody.querySelector(`.main`);
 const filmsStatisticContainer = siteBody.querySelector(`.footer__statistics`);
 
+const navigations = generateNavigations();
+const sorts = generateSorts();
+
 render(siteHeader, createUserRankTemplate());
-render(siteMainElement, createMainNavigationTemplate());
-render(siteMainElement, createMainSortTemplate());
+render(siteMainElement, createMainNavigationTemplate(navigations));
+render(siteMainElement, createMainSortTemplate(sorts));
 render(siteMainElement, createContentTemplate());
 render(filmsStatisticContainer, createFooterStatisticTemplate());
 
@@ -38,8 +49,13 @@ render(filmsList, createShowMoreButtonTemplate());
 
 const filmListContainer = filmsList.querySelector(`.films-list__container`);
 
-for (let i = 0; i < MOVIE_CARD_COUNT; i++) {
-  render(filmListContainer, createFilmCardTemplate());
+const cards = generateCards(MOVIE_CARD_COUNT);
+const cardsExtra = generateCards(EXTRA_MOVIE_CARD_COUNT);
+
+let showingMovieCardCount = SHOWING_MOVIE_CARD_COUNT_ON_START;
+
+for (let i = 0; i < showingMovieCardCount; i++) {
+  render(filmListContainer, createFilmCardTemplate(cards[i]));
 }
 
 for (let i = 0; i < EXTRA_LIST_COUNT; i++) {
@@ -52,8 +68,8 @@ filmsExtraListContainer.forEach((list) => {
   const extraFilmsListContainers = list.querySelectorAll(`.films-list__container`);
 
   extraFilmsListContainers.forEach((item) => {
-    for (let i = 0; i < EXTRA_MOVIE_CARD_COUNT; i++) {
-      render(item, createFilmCardTemplate());
+    for (let i = 0; i < cardsExtra.length; i++) {
+      render(item, createFilmCardTemplate(cardsExtra[i]));
     }
   });
 });
@@ -62,4 +78,26 @@ render(siteBody, createFilmDetailContainerTemplate());
 
 const detailFilmContainer = siteBody.querySelector(`.film-details`);
 
-render(detailFilmContainer, createFilmDetailCardTemplate());
+render(detailFilmContainer, createFilmDetailCardTemplate(cards[0]));
+
+const commentContainer = detailFilmContainer.querySelector(`.film-details__comments-list`);
+
+const comment = generateComments(COMMENT_COUNT);
+
+for (let i = 0; i < comment.length; i++) {
+  render(commentContainer, createCommentTemplate(comment[i]));
+}
+
+const showMoreButton = filmsContent.querySelector(`.films-list__show-more`);
+
+showMoreButton.addEventListener(`click`, () => {
+  const prevCardCount = showingMovieCardCount;
+  showingMovieCardCount = showingMovieCardCount + SHOWING_MOVIE_CARD_COUNT_BY_BUTTON;
+
+  cards.slice(prevCardCount, showingMovieCardCount)
+    .forEach((task) => render(filmListContainer, createFilmCardTemplate(task), `beforeend`));
+
+  if (showingMovieCardCount >= cards.length) {
+    showMoreButton.remove();
+  }
+});
