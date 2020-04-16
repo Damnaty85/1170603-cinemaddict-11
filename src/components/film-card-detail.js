@@ -1,15 +1,16 @@
 import {generateCardControl} from "../mock/control";
-import {generateTableCell} from "../mock/detail-table";
+import {generateComments} from "../mock/comment";
+import {MONTH_NAMES} from "../const";
 
-const createDetailTableMarkup = (cellData) => {
-  const {cellName, cellValue} = cellData;
+const createGenresMarkup = (genres) => {
+  const title = genres.length > 1 ? `Genres` : `Genre`;
 
-  return (`
-    <tr class="film-details__row">
-        <td class="film-details__term">${cellName}</td>
-        <td class="film-details__cell">${cellValue}</td>
-    </tr>
-  `);
+  return (
+    `<td class="film-details__term">${title}</td>
+    <td class="film-details__cell">
+      ${genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(`\n`)}
+    </td >`
+  );
 };
 
 const createButtonCardControlMarkup = (buttonData, isChecked) => {
@@ -22,14 +23,35 @@ const createButtonCardControlMarkup = (buttonData, isChecked) => {
   `);
 };
 
-export const createFilmDetailCardTemplate = (card) => {
-  const {title, description, poster, age, commentCount} = card;
+const createCommentsMarkup = (commentData) => {
+  const {emoji, commentText, author, date} = commentData;
+  return (`
+    <li class="film-details__comment">
+        <span class="film-details__comment-emoji">
+            <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">
+        </span>
+        <div>
+            <p class="film-details__comment-text">${commentText}</p>
+            <p class="film-details__comment-info">
+                <span class="film-details__comment-author">${author}</span>
+                <span class="film-details__comment-day">${date}</span>
+                <button class="film-details__comment-delete">Delete</button>
+            </p>
+        </div>
+    </li>
+  `);
+};
 
-  const cell = generateTableCell();
-  const detailCell = cell.map((it) => createDetailTableMarkup(it)).join(`\n`);
+export const createFilmDetailCardTemplate = (card) => {
+  const {title, description, poster, age, commentCount, director, actors, writers, duration, country, dateRelease, rating, genres} = card;
+
+  const date = `${dateRelease.getDate()} ${MONTH_NAMES[dateRelease.getMonth()]} ${dateRelease.getFullYear()}`;
 
   const control = generateCardControl();
-  const buttonControl = control.map((it) => createButtonCardControlMarkup(it)).join(`\n`);
+  const filmControls = control.map((it) => createButtonCardControlMarkup(it)).join(`\n`);
+
+  const comment = generateComments(commentCount);
+  const comments = comment.map((it) => createCommentsMarkup(it)).join(`\n`);
 
   return (`
      <form class="film-details__inner" action="" method="get">
@@ -52,12 +74,40 @@ export const createFilmDetailCardTemplate = (card) => {
             </div>
 
             <div class="film-details__rating">
-              <p class="film-details__total-rating">${card.rating}</p>
+              <p class="film-details__total-rating">${rating}</p>
             </div>
           </div>
 
           <table class="film-details__table">
-            ${detailCell}
+                <table class="film-details__table">
+                <tr class="film-details__row">
+                  <td class="film-details__term">Director</td>
+                  <td class="film-details__cell">${director}</td>
+                </tr>
+                <tr class="film-details__row">
+                  <td class="film-details__term">Writers</td>
+                  <td class="film-details__cell">${writers}</td>
+                </tr>
+                <tr class="film-details__row">
+                  <td class="film-details__term">Actors</td>
+                  <td class="film-details__cell">${actors}</td>
+                </tr>
+                <tr class="film-details__row">
+                  <td class="film-details__term">Release Date</td>
+                  <td class="film-details__cell">${date}</td>
+                </tr>
+                <tr class="film-details__row">
+                  <td class="film-details__term">Runtime</td>
+                  <td class="film-details__cell">${duration}</td>
+                </tr>
+                <tr class="film-details__row">
+                  <td class="film-details__term">Country</td>
+                  <td class="film-details__cell">${country}</td>
+                </tr>
+                <tr class="film-details__row">
+                  ${createGenresMarkup(genres)}
+                </tr>
+              </table>
           </table>
 
           <p class="film-details__film-description">
@@ -67,7 +117,7 @@ export const createFilmDetailCardTemplate = (card) => {
       </div>
 
       <section class="film-details__controls">
-        ${buttonControl}
+        ${filmControls}
       </section>
     </div>
 
@@ -76,6 +126,7 @@ export const createFilmDetailCardTemplate = (card) => {
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentCount}</span></h3>
 
         <ul class="film-details__comments-list">
+        ${comments}
         </ul>
 
         <div class="film-details__new-comment">

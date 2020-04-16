@@ -9,13 +9,7 @@ export const formatTime = (date) => {
   return `${hours}:${minutes}`;
 };
 
-export const getRandomArrayItem = (array) => {
-  const randomIndex = getRandomIntegerNumber(0, array.length);
-
-  return array[randomIndex];
-};
-
-export const getRandomIntegerNumber = (min, max) => {
+export const getRandomIntegerNumber = (max, min = 0) => {
   return min + Math.floor(Math.random() * (max - min));
 };
 
@@ -24,7 +18,13 @@ export const getRandomDate = () => {
   const sign = Math.random() > 0.5 ? 1 : -1;
   const diffValue = sign * getRandomIntegerNumber(0, 8);
 
-  targetDate.setFullYear(targetDate.getFullYear() - getRandomIntegerNumber(0, 10), targetDate.getDate() + diffValue, targetDate.getDay() + diffValue);
+  targetDate.setMinutes(targetDate.getMinutes() + diffValue);
 
   return targetDate;
+};
+
+export const getRandomArrayItem = (array) => {
+  const randomIndex = getRandomIntegerNumber(0, array.length);
+
+  return array[randomIndex];
 };
