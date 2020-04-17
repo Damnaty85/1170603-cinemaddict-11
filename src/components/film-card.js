@@ -1,4 +1,5 @@
 import {generateCardControl} from "../mock/control";
+import {setShortDescription} from "../utils";
 
 const createButtonCardControlMarkup = (buttonData, isActive) => {
   const {name, controlClass} = buttonData;
@@ -25,7 +26,7 @@ export const createFilmCardTemplate = (card) => {
                 <span class="film-card__genre">${genres[0]}</span>
             </p>
             <img src="./images/posters/${poster}" alt="" class="film-card__poster">
-            <p class="film-card__description">${description}</p>
+            <p class="film-card__description">${setShortDescription(description, 139)}</p>
             <a class="film-card__comments">${commentCount} comments</a>
             <form class="film-card__controls">
                 ${buttonControl}

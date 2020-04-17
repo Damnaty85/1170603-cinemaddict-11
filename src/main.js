@@ -7,7 +7,7 @@ import {createShowMoreButtonTemplate} from "./components/show-more";
 import {createFilmCardTemplate} from "./components/film-card";
 import {createFooterStatisticTemplate} from "./components/statistic";
 import {createFilmDetailContainerTemplate} from "./components/detail-container";
-import {createFilmDetailCardTemplate} from "./components/film-card-detail";
+import {createFilmDetailCardTemplate} from "./components/card-detail";
 import {generateNavigations} from "./mock/navigation";
 import {generateSorts} from "./mock/sort";
 import {generateCards} from "./mock/card";

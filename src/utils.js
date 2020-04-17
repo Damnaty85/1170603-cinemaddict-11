@@ -28,3 +28,11 @@ export const getRandomArrayItem = (array) => {
 
   return array[randomIndex];
 };
+
+export const setShortDescription = (text, maxLength) => {
+  let targetText = text;
+  if (targetText.length > maxLength) {
+    targetText = `${targetText.substr(0, maxLength)}...`;
+  }
+  return targetText;
+};

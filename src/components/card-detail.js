@@ -1,5 +1,4 @@
 import {generateCardControl} from "../mock/control";
-import {generateComments} from "../mock/comment";
 import {MONTH_NAMES} from "../const";
 
 const createGenresMarkup = (genres) => {
@@ -23,35 +22,13 @@ const createButtonCardControlMarkup = (buttonData, isChecked) => {
   `);
 };
 
-const createCommentsMarkup = (commentData) => {
-  const {emoji, commentText, author, date} = commentData;
-  return (`
-    <li class="film-details__comment">
-        <span class="film-details__comment-emoji">
-            <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">
-        </span>
-        <div>
-            <p class="film-details__comment-text">${commentText}</p>
-            <p class="film-details__comment-info">
-                <span class="film-details__comment-author">${author}</span>
-                <span class="film-details__comment-day">${date}</span>
-                <button class="film-details__comment-delete">Delete</button>
-            </p>
-        </div>
-    </li>
-  `);
-};
-
 export const createFilmDetailCardTemplate = (card) => {
-  const {title, description, poster, age, commentCount, director, actors, writers, duration, country, dateRelease, rating, genres} = card;
+  const {title, description, poster, age, commentCount, director, actors, writers, duration, country, dateRelease, rating, genres, commentList} = card;
 
   const date = `${dateRelease.getDate()} ${MONTH_NAMES[dateRelease.getMonth()]} ${dateRelease.getFullYear()}`;
 
   const control = generateCardControl();
   const filmControls = control.map((it) => createButtonCardControlMarkup(it)).join(`\n`);
-
-  const comment = generateComments(commentCount);
-  const comments = comment.map((it) => createCommentsMarkup(it)).join(`\n`);
 
   return (`
      <form class="film-details__inner" action="" method="get">
@@ -126,7 +103,7 @@ export const createFilmDetailCardTemplate = (card) => {
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentCount}</span></h3>
 
         <ul class="film-details__comments-list">
-        ${comments}
+        ${commentList}
         </ul>
 
         <div class="film-details__new-comment">
