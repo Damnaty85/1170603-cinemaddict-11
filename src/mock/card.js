@@ -10,6 +10,8 @@ export const getRandomDuration = () => {
   return `${hours}h ${(minutes < 10) ? `0${minutes}` : minutes}m`;
 };
 
+const getRandomBoolean = () => (Math.random() > 0.5);
+
 const generateCard = () => {
   return {
     title: getRandomArrayItem(TITLE),
@@ -20,10 +22,10 @@ const generateCard = () => {
     age: `${getRandomIntegerNumber(18, 5)}+`,
     dateRelease: getRandomDate(),
     duration: getRandomDuration(),
-    genres: GENRES.filter(Boolean).slice(3, 6),
+    genres: GENRES.filter(getRandomBoolean).slice(1, 4),
     director: DIRECTORS[getRandomIntegerNumber(DIRECTORS.length)],
-    writers: WRITERS.filter(Boolean).slice(0, getRandomIntegerNumber(3, 1)).join(`, `),
-    actors: ACTORS.filter(Boolean).slice(0, getRandomIntegerNumber(3, 1)).join(`, `),
+    writers: WRITERS.filter(getRandomBoolean).slice(0, getRandomIntegerNumber(4, 1)).join(`, `),
+    actors: ACTORS.filter(getRandomBoolean).slice(0, getRandomIntegerNumber(4, 1)).join(`, `),
     country: COUNTRY[getRandomIntegerNumber(COUNTRY.length)],
   };
 };
