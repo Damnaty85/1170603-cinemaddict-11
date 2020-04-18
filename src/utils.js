@@ -13,10 +13,9 @@ export const getRandomIntegerNumber = (max, min = 0) => {
   return min + Math.floor(Math.random() * (max - min));
 };
 
-export const getRandomDate = () => {
+export const getRandomDate = (sign = -1) => {
   const targetDate = new Date();
-  const sign = Math.random() > 0.5 ? 1 : -1;
-  const diffValue = sign * getRandomIntegerNumber(0, 8);
+  const diffValue = sign * getRandomIntegerNumber(3600000);
 
   targetDate.setMinutes(targetDate.getMinutes() + diffValue);
 
