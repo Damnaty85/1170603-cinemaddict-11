@@ -1,9 +1,15 @@
-export const createMainSortTemplate = () => {
+const createSortMarkup = (sort, isActive) => {
+  const {name} = sort;
+  return (`
+  <li><a href="#" class="sort__button${isActive ? ` sort__button--active` : ``}">Sort by ${name}</a></li>
+  `);
+};
+
+export const createMainSortTemplate = (sort) => {
+  const sortMarkup = sort.map((it, i) => createSortMarkup(it, i === 0)).join(`\n`);
   return (`
     <ul class="sort">
-        <li><a href="#" class="sort__button sort__button--active">Sort by default</a></li>
-        <li><a href="#" class="sort__button">Sort by date</a></li>
-        <li><a href="#" class="sort__button">Sort by rating</a></li>
+        ${sortMarkup}
     </ul>
   `);
 };

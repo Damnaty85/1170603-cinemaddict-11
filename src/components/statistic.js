@@ -1,5 +1,7 @@
+import {getRandomIntegerNumber} from "../utils";
+
 export const createFooterStatisticTemplate = () => {
   return (`
-    <p>130 291 movies inside</p>
+    <p>${getRandomIntegerNumber(130291).toLocaleString(`ru-RU`)} movies inside</p>
   `);
 };
