@@ -1,6 +1,6 @@
 import {getRandomArrayItem, getRandomIntegerNumber, getRandomDate} from "../utils";
 import {TITLE, DESCRIPTION, POSTER, GENRES, DIRECTORS, WRITERS, ACTORS, COUNTRY} from "../const";
-import {createFilterTemplate} from "../components/comment";
+import {generateComments} from "./comment";
 
 const getRandomRating = (max, min) => `${getRandomIntegerNumber(max, min)}.${getRandomIntegerNumber(max, min)}`;
 
@@ -22,7 +22,7 @@ const generateCard = () => {
     poster: getRandomArrayItem(POSTER),
     rating: getRandomRating(10, 1),
     commentCount,
-    commentList: createFilterTemplate(commentCount),
+    commentList: generateComments(commentCount),
     age: `${getRandomIntegerNumber(18, 5)}+`,
     dateRelease: getRandomDate(),
     duration: getRandomDuration(),

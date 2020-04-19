@@ -1,9 +1,7 @@
-import {generateComments} from "../mock/comment";
-
 const createCommentsMarkup = (commentData) => {
   const {emoji, commentText, author, date} = commentData;
-  return (`
-    <li class="film-details__comment">
+  return (
+    `<li class="film-details__comment">
         <span class="film-details__comment-emoji">
             <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">
         </span>
@@ -15,14 +13,10 @@ const createCommentsMarkup = (commentData) => {
                 <button class="film-details__comment-delete">Delete</button>
             </p>
         </div>
-    </li>
-  `);
+    </li>`
+  );
 };
 
-export const createFilterTemplate = (count) => {
-
-  const comment = generateComments(count);
-  const comments = comment.map((it) => createCommentsMarkup(it)).join(`\n`);
-
-  return comments;
+export const createCommentsTemplate = (comments) => {
+  return comments.map((it) => createCommentsMarkup(it)).join(`\n`);
 };

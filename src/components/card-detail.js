@@ -1,5 +1,7 @@
 import {generateCardControl} from "../mock/control";
 import {MONTH_NAMES} from "../const";
+import {createElement} from "../utils";
+import {createCommentsTemplate} from "./comment";
 
 const createGenresMarkup = (genres) => {
   const title = genres.length > 1 ? `Genres` : `Genre`;
@@ -22,7 +24,7 @@ const createButtonCardControlMarkup = (buttonData, isChecked) => {
   `);
 };
 
-export const createFilmDetailCardTemplate = (card) => {
+const createFilmDetailCardTemplate = (card) => {
   const {title, description, poster, age, commentCount, director, actors, writers, duration, country, dateRelease, rating, genres, commentList} = card;
 
   const date = `${dateRelease.getDate()} ${MONTH_NAMES[dateRelease.getMonth()]} ${dateRelease.getFullYear()}`;
@@ -30,8 +32,9 @@ export const createFilmDetailCardTemplate = (card) => {
   const control = generateCardControl();
   const filmControls = control.map((it) => createButtonCardControlMarkup(it)).join(`\n`);
 
-  return (`
-     <form class="film-details__inner" action="" method="get">
+  return (
+    `<section class="film-details">
+        <form class="film-details__inner" action="" method="get">
     <div class="form-details__top-container">
       <div class="film-details__close">
         <button class="film-details__close-btn" type="button">close</button>
@@ -103,7 +106,7 @@ export const createFilmDetailCardTemplate = (card) => {
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentCount}</span></h3>
 
         <ul class="film-details__comments-list">
-        ${commentList}
+        ${createCommentsTemplate(commentList)}
         </ul>
 
         <div class="film-details__new-comment">
@@ -138,5 +141,30 @@ export const createFilmDetailCardTemplate = (card) => {
       </section>
     </div>
   </form>
-  `);
+</section>`
+  );
 };
+
+export default class CardDetail {
+  constructor(card) {
+    this._card = card;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmDetailCardTemplate(this._card);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
