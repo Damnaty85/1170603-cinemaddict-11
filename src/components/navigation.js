@@ -1,3 +1,5 @@
+import {createElement} from "../utils";
+
 const createNavigationMarkup = (navItem, isActive) => {
   const {link, name, count} = navItem;
   return (`
@@ -5,14 +7,37 @@ const createNavigationMarkup = (navItem, isActive) => {
   `);
 };
 
-export const createMainNavigationTemplate = (navigation) => {
+const createMainNavigationTemplate = (navigation) => {
   const navigationMarkup = navigation.map((it, i) => createNavigationMarkup(it, i === 0)).join(`\n`);
-  return (`
-    <nav class="main-navigation">
+  return (
+    `<nav class="main-navigation">
         <div class="main-navigation__items">
             ${navigationMarkup}
         </div>
         <a href="#stats" class="main-navigation__additional">Stats</a>
-    </nav>
-  `);
+    </nav>`
+  );
 };
+
+export default class NavigationMenu {
+  constructor(navigation) {
+    this._navigations = navigation;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createMainNavigationTemplate(this._navigations);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
