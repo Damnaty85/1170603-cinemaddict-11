@@ -30,8 +30,6 @@ const renderCard = (cardListElement, card) => {
   const buttonCloseHandler = () => {
     siteBody.classList.remove(`hide-overflow`);
     cardDetailComponent.getElement().remove();
-    cardDetailComponent.removeElement();
-    document.removeEventListener(`keydown`, onEscKeyDown);
   };
 
   const onEscKeyDown = (evt) => {
@@ -59,9 +57,8 @@ const renderCard = (cardListElement, card) => {
 };
 
 const renderList = (listComponent, cards) => {
-  const isNodataToLoad = cards.every((card) => card.isNoData);
 
-  if (isNodataToLoad) {
+  if (cards.length === 0) {
     render(listComponent.getElement(), new NoDataComponent().getElement(), RenderPosition.BEFOREEND);
     return;
   }
@@ -86,15 +83,13 @@ const renderList = (listComponent, cards) => {
 
     if (showingCardsCount >= cards.length) {
       showMoreButtonComponent.getElement().remove();
-      showMoreButtonComponent.removeElement();
     }
   });
 };
 
 const renderListExtra = (listExtraComponent, cards, sortingBy) => {
-  const isNodataToLoad = cards.every((card) => card.isNoData);
 
-  if (isNodataToLoad) {
+  if (cards.length === 0) {
     listExtraComponent.getElement().remove();
     return;
   }
@@ -122,7 +117,7 @@ render(siteHeader, new RankComponent().getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, new NavigationComponent(navigations).getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, new SortComponent(sort).getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, new FilmsComponent().getElement(), RenderPosition.BEFOREEND);
-render(siteFooterStatistic, new StatisticComponent(MOVIE_CARD_COUNT).getElement(), RenderPosition.BEFOREEND);
+render(siteFooterStatistic, new StatisticComponent(cards.length).getElement(), RenderPosition.BEFOREEND);
 
 const filmsContainer = siteMainElement.querySelector(`.films`);
 
@@ -137,4 +132,3 @@ render(filmsContainer, listTopRatedComponent.getElement(), RenderPosition.BEFORE
 render(filmsContainer, listCommentedComponent.getElement(), RenderPosition.BEFOREEND);
 renderListExtra(listTopRatedComponent, cards, `rating`);
 renderListExtra(listCommentedComponent, cards, `commentCount`);
-
