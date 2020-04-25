@@ -1,4 +1,4 @@
-import {createElement} from "../utils";
+import AbstractComponent from "./abstract-component";
 
 const createNavigationMarkup = (navItem, isActive) => {
   const {link, name, count} = navItem;
@@ -19,25 +19,14 @@ const createMainNavigationTemplate = (navigation) => {
   );
 };
 
-export default class NavigationMenu {
+export default class NavigationMenu extends AbstractComponent {
   constructor(navigation) {
+    super();
+
     this._navigations = navigation;
-    this._element = null;
   }
 
   getTemplate() {
     return createMainNavigationTemplate(this._navigations);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

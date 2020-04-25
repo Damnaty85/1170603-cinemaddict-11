@@ -1,6 +1,6 @@
+import AbstractComponent from "./abstract-component";
 import {generateCardControl} from "../mock/control";
 import {MONTH_NAMES} from "../const";
-import {createElement} from "../utils";
 import {createCommentsTemplate} from "./comment";
 
 const createGenresMarkup = (genres) => {
@@ -145,26 +145,19 @@ const createFilmDetailCardTemplate = (card) => {
   );
 };
 
-export default class CardDetail {
+export default class CardDetail extends AbstractComponent {
   constructor(card) {
-    this._card = card;
+    super();
 
-    this._element = null;
+    this._card = card;
   }
 
   getTemplate() {
     return createFilmDetailCardTemplate(this._card);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setCloseDetailHandler(handler) {
+    this.getElement().querySelector(`.film-details__close-btn`)
+      .addEventListener(`click`, handler);
   }
 }

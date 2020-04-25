@@ -1,4 +1,4 @@
-import {getRandomDate, getRandomArrayItem, formatTime} from "../utils";
+import {getRandomDate, formatTime, getRandomArrayItem} from "../utils/common";
 
 const emojiArray = [`smile`, `puke`, `angry`, `sleeping`];
 
