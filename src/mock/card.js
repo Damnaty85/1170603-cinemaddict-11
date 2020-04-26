@@ -1,4 +1,4 @@
-import {getRandomArrayItem, getRandomIntegerNumber, getRandomDate} from "../utils";
+import {getRandomIntegerNumber, getRandomArrayItem, getRandomDate} from "../utils/common";
 import {TITLE, DESCRIPTION, POSTER, GENRES, DIRECTORS, WRITERS, ACTORS, COUNTRY} from "../const";
 import {generateComments} from "./comment";
 

@@ -1,41 +1,53 @@
-import {createElement} from "../utils";
+import AbstractComponent from "./abstract-component";
 
-const createSortMarkup = (sort, isActive) => {
-  const {name} = sort;
-  return (
-    `<li><a href="#" class="sort__button${isActive ? ` sort__button--active` : ``}">Sort by ${name}</a></li>`
-  );
+export const SortType = {
+  DEFAULT: `default`,
+  DATE: `date`,
+  RATING: `rating`,
 };
 
-const createMainSortTemplate = (sort) => {
-  const sortMarkup = sort.map((it, i) => createSortMarkup(it, i === 0)).join(`\n`);
+const createMainSortTemplate = () => {
   return (
     `<ul class="sort">
-        ${sortMarkup}
+      <li><a href="#" data-sort-type="${SortType.DEFAULT}" class="sort__button sort__button--active">Sort by default</a></li>
+      <li><a href="#" data-sort-type="${SortType.DATE}" class="sort__button">Sort by date</a></li>
+      <li><a href="#" data-sort-type="${SortType.RATING}" class="sort__button">Sort by rating</a></li>
     </ul>`
   );
 };
 
+export default class Sort extends AbstractComponent {
+  constructor() {
+    super();
 
-export default class Sort {
-  constructor(sort) {
-    this._sorts = sort;
-    this._element = null;
+    this._currentSortType = SortType.DEFAULT;
   }
 
   getTemplate() {
-    return createMainSortTemplate(this._sorts);
+    return createMainSortTemplate();
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
+  setSortTypeChangeHandler(handler) {
+    this.getElement().addEventListener(`click`, (evt) => {
+      evt.preventDefault();
 
-    return this._element;
-  }
+      if (evt.target.tagName !== `A`) {
+        return;
+      }
 
-  removeElement() {
-    this._element = null;
+      const sortType = evt.target.dataset.sortType;
+
+      if (this._currentSortType === sortType) {
+        return;
+      }
+
+      this._currentSortType = sortType;
+
+      this.getElement().querySelector(`.sort__button--active`).classList.remove(`sort__button--active`);
+
+      evt.target.classList.add(`sort__button--active`);
+
+      handler(this._currentSortType);
+    });
   }
 }
