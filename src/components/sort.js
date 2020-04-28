@@ -1,4 +1,5 @@
 import AbstractComponent from "./abstract-component";
+import {remove} from "../utils/render";
 
 export const SortType = {
   DEFAULT: `default`,
@@ -6,25 +7,35 @@ export const SortType = {
   RATING: `rating`,
 };
 
-const createMainSortTemplate = () => {
+const createSortMarkup = (sort, isActive) => {
+  const {name} = sort;
+  return (
+    `<li><a href="#" data-sort-type="${name}" class="sort__button${isActive ? ` sort__button--active` : ``}">Sort by ${name}</a></li>`
+  );
+};
+
+const createMainSortTemplate = (sort) => {
+  const sortMarkup = sort.map((it, i) => createSortMarkup(it, i === 0)).join(`\n`);
   return (
     `<ul class="sort">
-      <li><a href="#" data-sort-type="${SortType.DEFAULT}" class="sort__button sort__button--active">Sort by default</a></li>
-      <li><a href="#" data-sort-type="${SortType.DATE}" class="sort__button">Sort by date</a></li>
-      <li><a href="#" data-sort-type="${SortType.RATING}" class="sort__button">Sort by rating</a></li>
+        ${sortMarkup}
     </ul>`
   );
 };
 
 export default class Sort extends AbstractComponent {
-  constructor() {
+  constructor(sorts) {
     super();
-
+    this._sorts = sorts;
     this._currentSortType = SortType.DEFAULT;
   }
 
   getTemplate() {
-    return createMainSortTemplate();
+    return createMainSortTemplate(this._sorts);
+  }
+
+  getSortType() {
+    return this._currentSortType;
   }
 
   setSortTypeChangeHandler(handler) {
