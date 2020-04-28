@@ -1,5 +1,4 @@
 import AbstractComponent from "./abstract-component";
-import {remove} from "../utils/render";
 
 export const SortType = {
   DEFAULT: `default`,
