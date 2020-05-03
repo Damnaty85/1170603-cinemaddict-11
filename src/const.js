@@ -27,6 +27,7 @@ export const DESCRIPTION = [
   `Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`
 ];
 
+export const EMOJI_NAME = [`smile`, `puke`, `angry`, `sleeping`];
 
 export const GENRES = [
   `Biography`,

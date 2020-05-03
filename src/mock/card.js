@@ -31,6 +31,9 @@ const generateCard = () => {
     writers: WRITERS.filter(getRandomBoolean).slice(0, getRandomIntegerNumber(4, 1)).join(`, `),
     actors: ACTORS.filter(getRandomBoolean).slice(0, getRandomIntegerNumber(4, 1)).join(`, `),
     country: COUNTRY[getRandomIntegerNumber(COUNTRY.length)],
+    isWatchlist: Math.random() > 0.5,
+    isWatched: Math.random() > 0.5,
+    isFavorite: Math.random() > 0.5,
   };
 };
 
