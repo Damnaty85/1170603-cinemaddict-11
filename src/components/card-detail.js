@@ -1,6 +1,5 @@
-import AbstractComponent from "./abstract-component";
-import {generateCardControl} from "../mock/control";
-import {MONTH_NAMES} from "../const";
+import AbstractSmartComponent from "./abstract-smart-component";
+import {MONTH_NAMES, EMOJI_NAME} from "../const";
 import {createCommentsTemplate} from "./comment";
 
 const createGenresMarkup = (genres) => {
@@ -14,23 +13,28 @@ const createGenresMarkup = (genres) => {
   );
 };
 
-const createButtonCardControlMarkup = (buttonData, isChecked) => {
-  const {nameDetail, controlClassDetail} = buttonData;
-  isChecked = Math.random() > 0.5;
-
-  return (`
-    <input type="checkbox" class="film-details__control-input visually-hidden" id="${controlClassDetail}" name="${controlClassDetail}" ${isChecked ? `checked` : ``}>
-    <label for="${controlClassDetail}" class="film-details__control-label film-details__control-label--${controlClassDetail}">${nameDetail}</label>
-  `);
+const createAddEmojiMarkup = (emojiName) => {
+  return emojiName ? `<img src="./images/emoji/${emojiName}.png" width="55" height="55" alt="emoji-${emojiName}">` : ``;
 };
 
-const createFilmDetailCardTemplate = (card) => {
-  const {title, description, poster, age, commentCount, director, actors, writers, duration, country, dateRelease, rating, genres, commentList} = card;
+const createEmojiListMarkup = (emojiName) => {
+  return EMOJI_NAME.map((name) => {
+    const isChecked = emojiName === name;
+    return (
+      `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${name}" value="${name}" ${isChecked ? `checked` : ``}>
+        <label class="film-details__emoji-label" for="emoji-${name}">
+            <img src="./images/emoji/${name}.png" width="30" height="30" alt="emoji">
+        </label>`
+    );
+  }).join(`\n`);
+};
 
+const createFilmDetailCardTemplate = (card, option) => {
+  const {title, description, poster, age, commentCount, director, actors, writers, duration, country, dateRelease, rating, genres, commentList} = card;
+  const {emojiName, isWatchlist, isWatched, isFavorite} = option;
   const date = `${dateRelease.getDate()} ${MONTH_NAMES[dateRelease.getMonth()]} ${dateRelease.getFullYear()}`;
 
-  const control = generateCardControl();
-  const filmControls = control.map((it) => createButtonCardControlMarkup(it)).join(`\n`);
+  const emojiListMarkup = createEmojiListMarkup(emojiName);
 
   return (
     `<section class="film-details">
@@ -95,9 +99,15 @@ const createFilmDetailCardTemplate = (card) => {
           </p>
         </div>
       </div>
-
       <section class="film-details__controls">
-        ${filmControls}
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isWatchlist ? `checked` : ``}>
+        <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
+
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isWatched ? `checked` : ``}>
+        <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
+
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isFavorite ? `checked` : ``}>
+        <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
       </section>
     </div>
 
@@ -110,32 +120,14 @@ const createFilmDetailCardTemplate = (card) => {
         </ul>
 
         <div class="film-details__new-comment">
-          <div for="add-emoji" class="film-details__add-emoji-label"></div>
+          <div for="add-emoji" class="film-details__add-emoji-label">${createAddEmojiMarkup(emojiName)}</div>
 
           <label class="film-details__comment-label">
             <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
           </label>
 
           <div class="film-details__emoji-list">
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
-            <label class="film-details__emoji-label" for="emoji-smile">
-              <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
-            <label class="film-details__emoji-label" for="emoji-sleeping">
-              <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
-            <label class="film-details__emoji-label" for="emoji-puke">
-              <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
-            </label>
-
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
-            <label class="film-details__emoji-label" for="emoji-angry">
-              <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
-            </label>
+           ${emojiListMarkup}
           </div>
         </div>
       </section>
@@ -145,19 +137,84 @@ const createFilmDetailCardTemplate = (card) => {
   );
 };
 
-export default class CardDetail extends AbstractComponent {
+export default class CardDetail extends AbstractSmartComponent {
   constructor(card) {
     super();
 
     this._card = card;
+
+    this._isWatchlist = this._card.isWatchlist;
+    this._isWatched = this._card.isWatched;
+    this._isFavorite = this._card.isFavorite;
+
+    this._buttonCloseHandler = null;
+    this._emojiName = ``;
+
+    this._subscribeOnEvents();
   }
 
   getTemplate() {
-    return createFilmDetailCardTemplate(this._card);
+    return createFilmDetailCardTemplate(this._card, {
+      isWatchlist: this._isWatchlist,
+      isWatched: this._isWatched,
+      isFavorite: this._isFavorite,
+      emojiName: this._emojiName,
+    });
+  }
+
+  recoveryListeners() {
+    this.setCloseDetailHandler(this._buttonCloseHandler);
+    this._subscribeOnEvents();
+  }
+
+  rerender() {
+    super.rerender();
   }
 
   setCloseDetailHandler(handler) {
     this.getElement().querySelector(`.film-details__close-btn`)
       .addEventListener(`click`, handler);
+    this._buttonCloseHandler = handler;
+  }
+
+  _subscribeOnEvents() {
+    const element = this.getElement();
+
+    element.querySelector(`#watchlist`)
+      .addEventListener(`click`, () => {
+        this._isWatchlist = !this._isWatchlist;
+
+        this.rerender();
+      });
+
+    element.querySelector(`#watched`)
+      .addEventListener(`click`, () => {
+        this._isWatched = !this._isWatched;
+
+        this.rerender();
+      });
+
+    element.querySelector(`#favorite`)
+      .addEventListener(`click`, () => {
+        this._isFavorite = !this._isFavorite;
+
+        this.rerender();
+      });
+
+    element.querySelector(`.film-details__emoji-list`)
+      .addEventListener(`change`, (evt) => {
+        this._emojiName = evt.target.value;
+
+        this.rerender();
+      });
+  }
+
+  reset() {
+    this._isWatchlist = this._card.isWatchlist;
+    this._isWatched = this._card.isWatched;
+    this._isFavorite = this._card.isFavorite;
+    this._emojiName = ``;
+
+    this.rerender();
   }
 }

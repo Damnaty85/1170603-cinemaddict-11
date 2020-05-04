@@ -1,21 +1,18 @@
 import AbstractComponent from "./abstract-component";
-import {generateCardControl} from "../mock/control";
 import {setShortDescription} from "../utils/common";
 
-const createButtonCardControlMarkup = (buttonData, isActive) => {
-  const {name, controlClass} = buttonData;
-  isActive = Math.random() > 0.5;
-
+const createButtonCardControlMarkup = (name, controlClass, isActive = true) => {
   return (
-    `<button class="film-card__controls-item button film-card__controls-item--${controlClass} ${isActive ? `film-card__controls-item--active` : ``}">${name}</button>`
+    `<button class="film-card__controls-item button film-card__controls-item--${controlClass} ${isActive ? `` : `film-card__controls-item--active`}">${name}</button>`
   );
 };
 
 const createFilmCardTemplate = (card) => {
   const {title, rating, dateRelease, duration, genres, poster, description, commentCount} = card;
 
-  const control = generateCardControl();
-  const buttonControl = control.map((it, i) => createButtonCardControlMarkup(it, i === 0)).join(`\n`);
+  const buttonAddWatchList = createButtonCardControlMarkup(`Add to watchlist`, `add-to-watchlist`, !card.isWatchlist);
+  const buttonWatched = createButtonCardControlMarkup(`Mark as watched`, `mark-as-watched`, !card.isWatched);
+  const buttonFavorite = createButtonCardControlMarkup(`Mark as favorite`, `favorite`, !card.isFavorite);
 
   return (
     `<article class="film-card">
@@ -30,10 +27,11 @@ const createFilmCardTemplate = (card) => {
             <p class="film-card__description">${setShortDescription(description, 139)}</p>
             <a class="film-card__comments">${commentCount} comments</a>
             <form class="film-card__controls">
-                ${buttonControl}
+                ${buttonAddWatchList}
+                ${buttonWatched}
+                ${buttonFavorite}
             </form>
-        </article>`
-  );
+        </article>`);
 };
 
 export default class Card extends AbstractComponent {
@@ -49,6 +47,21 @@ export default class Card extends AbstractComponent {
 
   setOpenDetailHandler(selector, handler) {
     this.getElement().querySelector(selector)
+      .addEventListener(`click`, handler);
+  }
+
+  setWatchlistButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`)
+      .addEventListener(`click`, handler);
+  }
+
+  setWatchedButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`)
+      .addEventListener(`click`, handler);
+  }
+
+  setFavoritesButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-card__controls-item--favorite`)
       .addEventListener(`click`, handler);
   }
 }
