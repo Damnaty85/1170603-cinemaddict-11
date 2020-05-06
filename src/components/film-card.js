@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract-component";
-import {setShortDescription} from "../utils/common";
+import {formatDate, setShortDescription} from "../utils/common";
 
 const createButtonCardControlMarkup = (name, controlClass, isActive = true) => {
   return (
@@ -10,16 +10,18 @@ const createButtonCardControlMarkup = (name, controlClass, isActive = true) => {
 const createFilmCardTemplate = (card) => {
   const {title, rating, dateRelease, duration, genres, poster, description, commentCount} = card;
 
-  const buttonAddWatchList = createButtonCardControlMarkup(`Add to watchlist`, `add-to-watchlist`, !card.isWatchlist);
-  const buttonWatched = createButtonCardControlMarkup(`Mark as watched`, `mark-as-watched`, !card.isWatched);
-  const buttonFavorite = createButtonCardControlMarkup(`Mark as favorite`, `favorite`, !card.isFavorite);
+  const buttonAddWatchList = createButtonCardControlMarkup(`Add to watchlist`, `add-to-watchlist`, card.isWatchlist);
+  const buttonWatched = createButtonCardControlMarkup(`Mark as watched`, `mark-as-watched`, card.isWatched);
+  const buttonFavorite = createButtonCardControlMarkup(`Mark as favorite`, `favorite`, card.isFavorite);
+
+  const date = formatDate(dateRelease);
 
   return (
     `<article class="film-card">
             <h3 class="film-card__title">${title}</h3>
             <p class="film-card__rating">${rating}</p>
             <p class="film-card__info">
-                <span class="film-card__year">${dateRelease.getFullYear()}</span>
+                <span class="film-card__year">${date}</span>
                 <span class="film-card__duration">${duration}</span>
                 <span class="film-card__genre">${genres[0]}</span>
             </p>
@@ -31,7 +33,8 @@ const createFilmCardTemplate = (card) => {
                 ${buttonWatched}
                 ${buttonFavorite}
             </form>
-        </article>`);
+        </article>`
+  );
 };
 
 export default class Card extends AbstractComponent {
