@@ -73,7 +73,7 @@ export const ACTORS = [
   `Keanu Reeves`
 ];
 
-export const COUNTRYS = [
+export const COUNTRIES = [
   `British`,
   `Italy`,
   `Ireland`,

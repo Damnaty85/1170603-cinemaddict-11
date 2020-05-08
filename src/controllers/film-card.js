@@ -84,7 +84,7 @@ export default class CardController {
     const siteBody = document.querySelector(`body`);
     siteBody.classList.add(`hide-overflow`);
     render(siteBody, this._cardDetailComponent, RenderPosition.BEFOREEND);
-    this._mode = Mode.DETAIL;
+    this._mode = Mode.DEFAULT;
 
     document.addEventListener(`keydown`, this._onEscKeyDown);
   }
@@ -93,8 +93,7 @@ export default class CardController {
     remove(this._cardDetailComponent);
     const siteBody = document.querySelector(`body`);
     siteBody.classList.remove(`hide-overflow`);
-    this._cardDetailComponent.reset();
-    this._mode = Mode.DEFAULT;
+    this._mode = Mode.DETAIL;
   }
 
   _onEscKeyDown(evt) {

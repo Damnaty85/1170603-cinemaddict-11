@@ -209,13 +209,4 @@ export default class CardDetail extends AbstractSmartComponent {
         this.rerender();
       });
   }
-
-  reset() {
-    this._isWatchlist = this._card.isWatchlist;
-    this._isWatched = this._card.isWatched;
-    this._isFavorite = this._card.isFavorite;
-    this._emojiName = ``;
-
-    this.rerender();
-  }
 }

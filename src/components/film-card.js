@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract-component";
-import {formatDate, setShortDescription} from "../utils/common";
+import {formatYear, setShortDescription} from "../utils/common";
 
 const createButtonCardControlMarkup = (name, controlClass, isActive = true) => {
   return (
@@ -14,7 +14,7 @@ const createFilmCardTemplate = (card) => {
   const buttonWatched = createButtonCardControlMarkup(`Mark as watched`, `mark-as-watched`, card.isWatched);
   const buttonFavorite = createButtonCardControlMarkup(`Mark as favorite`, `favorite`, card.isFavorite);
 
-  const date = formatDate(dateRelease);
+  const date = formatYear(dateRelease);
 
   return (
     `<article class="film-card">

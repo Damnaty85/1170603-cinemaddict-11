@@ -25,7 +25,7 @@ const renderCards = (container, cards, onDataChange, onViewChange) => {
 
     cardController.render(card);
 
-    return CardController;
+    return cardController;
   });
 };
 
@@ -127,11 +127,10 @@ export default class PageController {
 
     this._showMoreComponent.setClickHandler(() => {
       const prevCardsCount = this._showingCardsCount;
-      const cardListElement = filmListContainer.querySelector(`.films-list__container`);
       this._showingCardsCount = this._showingCardsCount + SHOWING_MOVIE_CARD_COUNT_BY_BUTTON;
 
       const sortedCards = getSortedCards(this._cards, this._sortComponent.getSortType(), prevCardsCount, this._showingCardsCount);
-      const newCards = renderCards(cardListElement, sortedCards, this._onDataChange, this._onViewChange);
+      const newCards = renderCards(this._filmsListComponent.getElement(), sortedCards, this._onDataChange, this._onViewChange);
 
       this._showedCardControllers = this._showedCardControllers.concat(newCards);
 
@@ -165,7 +164,7 @@ export default class PageController {
 
     cardListElement.innerHTML = ``;
 
-    const newCards = renderCards(cardListElement, sortedCards, this._onDataChange, this._onViewChange);
+    const newCards = renderCards(this._filmsListComponent.getElement(), sortedCards, this._onDataChange, this._onViewChange);
     this._showedCardControllers = newCards;
 
     this._renderShowMoreButton();
