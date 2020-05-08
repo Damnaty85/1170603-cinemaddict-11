@@ -1,6 +1,7 @@
 import AbstractSmartComponent from "./abstract-smart-component";
-import {MONTH_NAMES, EMOJI_NAME} from "../const";
+import {EMOJI_NAMES} from "../const";
 import {createCommentsTemplate} from "./comment";
+import {formatDate} from "../utils/common";
 
 const createGenresMarkup = (genres) => {
   const title = genres.length > 1 ? `Genres` : `Genre`;
@@ -18,7 +19,7 @@ const createAddEmojiMarkup = (emojiName) => {
 };
 
 const createEmojiListMarkup = (emojiName) => {
-  return EMOJI_NAME.map((name) => {
+  return EMOJI_NAMES.map((name) => {
     const isChecked = emojiName === name;
     return (
       `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${name}" value="${name}" ${isChecked ? `checked` : ``}>
@@ -32,7 +33,7 @@ const createEmojiListMarkup = (emojiName) => {
 const createFilmDetailCardTemplate = (card, option) => {
   const {title, description, poster, age, commentCount, director, actors, writers, duration, country, dateRelease, rating, genres, commentList} = card;
   const {emojiName, isWatchlist, isWatched, isFavorite} = option;
-  const date = `${dateRelease.getDate()} ${MONTH_NAMES[dateRelease.getMonth()]} ${dateRelease.getFullYear()}`;
+  const date = formatDate(dateRelease);
 
   const emojiListMarkup = createEmojiListMarkup(emojiName);
 
@@ -207,14 +208,5 @@ export default class CardDetail extends AbstractSmartComponent {
 
         this.rerender();
       });
-  }
-
-  reset() {
-    this._isWatchlist = this._card.isWatchlist;
-    this._isWatched = this._card.isWatched;
-    this._isFavorite = this._card.isFavorite;
-    this._emojiName = ``;
-
-    this.rerender();
   }
 }

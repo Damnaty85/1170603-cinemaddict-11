@@ -4,16 +4,16 @@ import {render, replace, remove, RenderPosition} from "../utils/render.js";
 
 const Mode = {
   DEFAULT: `default`,
-  EDIT: `edit`,
+  DETAIL: `detail`,
 };
-
-const siteBody = document.querySelector(`body`);
 
 export default class CardController {
   constructor(container, onDataChange, onViewChange) {
+
     this._container = container;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
+
     this._mode = Mode.DEFAULT;
     this._cardComponent = null;
     this._cardDetailComponent = null;
@@ -80,14 +80,20 @@ export default class CardController {
   }
 
   _popupOpenHandler() {
+    this._onViewChange();
+    const siteBody = document.querySelector(`body`);
     siteBody.classList.add(`hide-overflow`);
     render(siteBody, this._cardDetailComponent, RenderPosition.BEFOREEND);
+    this._mode = Mode.DEFAULT;
+
     document.addEventListener(`keydown`, this._onEscKeyDown);
   }
 
   _buttonCloseHandler() {
-    siteBody.classList.remove(`hide-overflow`);
     remove(this._cardDetailComponent);
+    const siteBody = document.querySelector(`body`);
+    siteBody.classList.remove(`hide-overflow`);
+    this._mode = Mode.DETAIL;
   }
 
   _onEscKeyDown(evt) {

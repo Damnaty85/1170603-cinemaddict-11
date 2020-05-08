@@ -1,5 +1,5 @@
-import {getRandomIntegerNumber, getRandomArrayItem, getRandomDate} from "../utils/common";
-import {TITLE, DESCRIPTION, POSTER, GENRES, DIRECTORS, WRITERS, ACTORS, COUNTRY} from "../const";
+import {getRandomIntegerNumber, getRandomArrayItem, getRandomDate, formatRuntime} from "../utils/common";
+import {TITLES, DESCRIPTIONS, POSTERS, GENRES, DIRECTORS, WRITERS, ACTORS, COUNTRIES} from "../const";
 import {generateComments} from "./comment";
 
 const getRandomRating = (max, min) => `${getRandomIntegerNumber(max, min)}.${getRandomIntegerNumber(max, min)}`;
@@ -17,20 +17,20 @@ const generateCard = () => {
   const commentCount = getRandomIntegerNumber(30);
 
   return {
-    title: getRandomArrayItem(TITLE),
-    description: getRandomArrayItem(DESCRIPTION),
-    poster: getRandomArrayItem(POSTER),
+    title: getRandomArrayItem(TITLES),
+    description: getRandomArrayItem(DESCRIPTIONS),
+    poster: getRandomArrayItem(POSTERS),
     rating: getRandomRating(10, 1),
     commentCount,
     commentList: generateComments(commentCount),
     age: `${getRandomIntegerNumber(18, 5)}+`,
     dateRelease: getRandomDate(),
-    duration: getRandomDuration(),
+    duration: formatRuntime(getRandomIntegerNumber(200, 60)),
     genres: GENRES.filter(getRandomBoolean).slice(1, 4),
     director: DIRECTORS[getRandomIntegerNumber(DIRECTORS.length)],
     writers: WRITERS.filter(getRandomBoolean).slice(0, getRandomIntegerNumber(4, 1)).join(`, `),
     actors: ACTORS.filter(getRandomBoolean).slice(0, getRandomIntegerNumber(4, 1)).join(`, `),
-    country: COUNTRY[getRandomIntegerNumber(COUNTRY.length)],
+    country: COUNTRIES[getRandomIntegerNumber(COUNTRIES.length)],
     isWatchlist: Math.random() > 0.5,
     isWatched: Math.random() > 0.5,
     isFavorite: Math.random() > 0.5,

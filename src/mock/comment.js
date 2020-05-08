@@ -1,5 +1,5 @@
-import {getRandomDate, formatTime, getRandomArrayItem} from "../utils/common";
-import {EMOJI_NAME} from "../const";
+import {getRandomDate, getRandomArrayItem, formatDateComment} from "../utils/common";
+import {EMOJI_NAMES} from "../const";
 
 const authorNameArray = [`Tim Macoveev`, `John Doe`, `Jane Doe`];
 
@@ -7,14 +7,13 @@ const commentTextArray = [`Interesting setting and a good cast`, `Boooooooooorin
 
 const generateComment = () => {
   const commentDate = getRandomDate();
-  const date = commentDate.toLocaleDateString(`en-GB`);
-  const time = formatTime(commentDate);
+  const date = formatDateComment(commentDate);
 
   return {
-    emoji: getRandomArrayItem(EMOJI_NAME),
+    emoji: getRandomArrayItem(EMOJI_NAMES),
     commentText: getRandomArrayItem(commentTextArray),
     author: getRandomArrayItem(authorNameArray),
-    date: `${date} ${time}`,
+    date: `${date}`,
   };
 };
 
