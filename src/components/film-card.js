@@ -8,13 +8,14 @@ const createButtonCardControlMarkup = (name, controlClass, isActive = true) => {
 };
 
 const createFilmCardTemplate = (card) => {
-  const {title, rating, dateRelease, duration, genres, poster, description, commentCount} = card;
+  const {title, rating, dateRelease, duration, genres, poster, description, commentList} = card;
 
-  const buttonAddWatchList = createButtonCardControlMarkup(`Add to watchlist`, `add-to-watchlist`, card.isWatchlist);
-  const buttonWatched = createButtonCardControlMarkup(`Mark as watched`, `mark-as-watched`, card.isWatched);
-  const buttonFavorite = createButtonCardControlMarkup(`Mark as favorite`, `favorite`, card.isFavorite);
+  const buttonAddWatchList = createButtonCardControlMarkup(`Add to watchlist`, `add-to-watchlist`, !card.isWatchlist);
+  const buttonWatched = createButtonCardControlMarkup(`Mark as watched`, `mark-as-watched`, !card.isWatched);
+  const buttonFavorite = createButtonCardControlMarkup(`Mark as favorite`, `favorite`, !card.isFavorite);
 
   const date = formatYear(dateRelease);
+  const commentCount = commentList.length;
 
   return (
     `<article class="film-card">

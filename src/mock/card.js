@@ -4,25 +4,18 @@ import {generateComments} from "./comment";
 
 const getRandomRating = (max, min) => `${getRandomIntegerNumber(max, min)}.${getRandomIntegerNumber(max, min)}`;
 
-export const getRandomDuration = () => {
-  const minutes = getRandomIntegerNumber(60);
-  const hours = getRandomIntegerNumber(3, 1);
-
-  return `${hours}h ${(minutes < 10) ? `0${minutes}` : minutes}m`;
-};
-
 const getRandomBoolean = () => (Math.random() > 0.5);
 
 const generateCard = () => {
-  const commentCount = getRandomIntegerNumber(30);
+  const commentList = generateComments(getRandomIntegerNumber(20));
 
   return {
+    id: String(new Date() + Math.random()),
     title: getRandomArrayItem(TITLES),
     description: getRandomArrayItem(DESCRIPTIONS),
     poster: getRandomArrayItem(POSTERS),
     rating: getRandomRating(10, 1),
-    commentCount,
-    commentList: generateComments(commentCount),
+    commentList,
     age: `${getRandomIntegerNumber(18, 5)}+`,
     dateRelease: getRandomDate(),
     duration: formatRuntime(getRandomIntegerNumber(200, 60)),

@@ -1,7 +1,7 @@
 const createCommentsMarkup = (commentData) => {
-  const {emoji, commentText, author, date} = commentData;
+  const {id, emoji, commentText, author, date} = commentData;
   return (
-    `<li class="film-details__comment">
+    `<li class="film-details__comment" id="${id}">
         <span class="film-details__comment-emoji">
             <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">
         </span>

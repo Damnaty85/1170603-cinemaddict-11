@@ -10,6 +10,7 @@ const generateComment = () => {
   const date = formatDateComment(commentDate);
 
   return {
+    id: String(Math.random()),
     emoji: getRandomArrayItem(EMOJI_NAMES),
     commentText: getRandomArrayItem(commentTextArray),
     author: getRandomArrayItem(authorNameArray),
