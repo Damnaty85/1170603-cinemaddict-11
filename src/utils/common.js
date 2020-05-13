@@ -12,7 +12,7 @@ export const formatYear = (date) => {
 };
 
 export const formatDateComment = (date) => {
-  return moment(date).format(`DD/MM/Y hh:mm`);
+  return moment.utc().to(date);
 };
 
 export const formatRuntime = (number) => {
@@ -25,7 +25,7 @@ export const getRandomIntegerNumber = (max, min = 0) => {
 
 export const getRandomDate = (sign = -1) => {
   const targetDate = new Date();
-  const diffValue = sign * getRandomIntegerNumber(36000000);
+  const diffValue = sign * getRandomIntegerNumber(3600000);
 
   targetDate.setMinutes(targetDate.getMinutes() + diffValue);
 

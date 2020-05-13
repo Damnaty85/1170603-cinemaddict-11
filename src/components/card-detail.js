@@ -1,7 +1,8 @@
 import AbstractSmartComponent from "./abstract-smart-component";
 import {EMOJI_NAMES} from "../const";
 import {createCommentsTemplate} from "./comment";
-import {formatDate} from "../utils/common";
+import {formatDate, formatDateComment} from "../utils/common";
+import he from 'he';
 
 const createGenresMarkup = (genres) => {
   const title = genres.length > 1 ? `Genres` : `Genre`;
@@ -31,9 +32,10 @@ const createEmojiListMarkup = (emojiName) => {
 };
 
 const createFilmDetailCardTemplate = (card, option) => {
-  const {title, description, poster, age, commentCount, director, actors, writers, duration, country, dateRelease, rating, genres, commentList} = card;
+  const {title, description, poster, age, director, actors, writers, duration, country, dateRelease, rating, genres, commentList} = card;
   const {emojiName, isWatchlist, isWatched, isFavorite} = option;
   const date = formatDate(dateRelease);
+  const commentCount = commentList.length;
 
   const emojiListMarkup = createEmojiListMarkup(emojiName);
 
@@ -149,6 +151,8 @@ export default class CardDetail extends AbstractSmartComponent {
     this._isFavorite = this._card.isFavorite;
 
     this._buttonCloseHandler = null;
+    this._commentsDeleteClickHandler = null;
+    this._commentSubmitHandler = null;
     this._emojiName = ``;
 
     this._subscribeOnEvents();
@@ -165,6 +169,11 @@ export default class CardDetail extends AbstractSmartComponent {
 
   recoveryListeners() {
     this.setCloseDetailHandler(this._buttonCloseHandler);
+    this.setWatchlistButtonClickHandler(this._addWatchListHandler);
+    this.setWatchedButtonClickHandler(this._markAsWatchedHandler);
+    this.setFavoritesButtonClickHandler(this._favoriteHandler);
+    this.setCommentsDeleteClickHandler(this._commentsDeleteClickHandler);
+    this.setCommentSubmitHandler(this._commentSubmitHandler);
     this._subscribeOnEvents();
   }
 
@@ -178,29 +187,71 @@ export default class CardDetail extends AbstractSmartComponent {
     this._buttonCloseHandler = handler;
   }
 
+  _parseFormData(formData) {
+    return {
+      id: String(Math.random()),
+      emoji: this._emojiName,
+      commentText: he.encode(formData.get(`comment`)),
+      author: `you`,
+      date: formatDateComment(new Date()),
+    };
+  }
+
+  getAddCommentFormData() {
+    const form = this.getElement().querySelector(`.film-details__inner`);
+    const formData = new FormData(form);
+
+    return this._parseFormData(formData);
+  }
+
+  setCommentsDeleteClickHandler(handler) {
+    this.getElement().querySelectorAll(`.film-details__comment-delete`)
+      .forEach((deleteButton) => {
+        deleteButton.addEventListener(`click`, (evt) => {
+          evt.preventDefault();
+          const commentId = evt.target.closest(`li`).id;
+          handler(commentId);
+        });
+      });
+
+    this._commentsDeleteClickHandler = handler;
+  }
+
+  setCommentSubmitHandler(handler) {
+    this.getElement().querySelector(`.film-details__comment-input`)
+      .addEventListener(`keydown`, (evt) => {
+        const ctrlOrCommandKey = evt.ctrlKey || evt.metaKey;
+        const enterKey = evt.key === `Enter`;
+
+        if (ctrlOrCommandKey && enterKey) {
+          handler();
+        }
+      });
+
+    this._commentSubmitHandler = handler;
+  }
+
+
+  setWatchlistButtonClickHandler(handler) {
+    this._element.querySelector(`.film-details__control-label--watchlist`)
+      .addEventListener(`click`, handler);
+    this._addWatchListHandler = handler;
+  }
+
+  setWatchedButtonClickHandler(handler) {
+    this._element.querySelector(`.film-details__control-label--watched`)
+      .addEventListener(`click`, handler);
+    this._markAsWatchedHandler = handler;
+  }
+
+  setFavoritesButtonClickHandler(handler) {
+    this._element.querySelector(`.film-details__control-label--favorite`)
+      .addEventListener(`click`, handler);
+    this._favoriteHandler = handler;
+  }
+
   _subscribeOnEvents() {
     const element = this.getElement();
-
-    element.querySelector(`#watchlist`)
-      .addEventListener(`click`, () => {
-        this._isWatchlist = !this._isWatchlist;
-
-        this.rerender();
-      });
-
-    element.querySelector(`#watched`)
-      .addEventListener(`click`, () => {
-        this._isWatched = !this._isWatched;
-
-        this.rerender();
-      });
-
-    element.querySelector(`#favorite`)
-      .addEventListener(`click`, () => {
-        this._isFavorite = !this._isFavorite;
-
-        this.rerender();
-      });
 
     element.querySelector(`.film-details__emoji-list`)
       .addEventListener(`change`, (evt) => {
