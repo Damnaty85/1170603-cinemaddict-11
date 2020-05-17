@@ -1,7 +1,7 @@
 import AbstractSmartComponent from "./abstract-smart-component";
 import {EMOJI_NAMES} from "../const";
 import {createCommentsTemplate} from "./comment";
-import {formatDate, formatDateComment} from "../utils/common";
+import {formatDate, formatDateComment, formatRuntime} from "../utils/common";
 import he from 'he';
 
 const createGenresMarkup = (genres) => {
@@ -35,6 +35,7 @@ const createFilmDetailCardTemplate = (card, option) => {
   const {title, description, poster, age, director, actors, writers, duration, country, dateRelease, rating, genres, commentList} = card;
   const {emojiName, isWatchlist, isWatched, isFavorite} = option;
   const date = formatDate(dateRelease);
+  const runtime = formatRuntime(duration);
   const commentCount = commentList.length;
 
   const emojiListMarkup = createEmojiListMarkup(emojiName);
@@ -85,7 +86,7 @@ const createFilmDetailCardTemplate = (card, option) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>
-                  <td class="film-details__cell">${duration}</td>
+                  <td class="film-details__cell">${runtime}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Country</td>
