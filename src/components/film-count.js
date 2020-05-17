@@ -1,6 +1,6 @@
 import AbstractComponent from "./abstract-component";
 
-const createFooterStatisticTemplate = (count) => {
+const createFooterFilmCountTemplate = (count) => {
   return (
     `<p>${count.toLocaleString(`ru-RU`)} movies inside</p>`
   );
@@ -14,6 +14,6 @@ export default class Sort extends AbstractComponent {
   }
 
   getTemplate() {
-    return createFooterStatisticTemplate(this._count);
+    return createFooterFilmCountTemplate(this._count);
   }
 }

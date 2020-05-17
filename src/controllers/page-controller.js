@@ -95,6 +95,16 @@ export default class PageController {
     this._moviesModel.setFilterChangeHandler(this._onFilterChange);
   }
 
+  hide() {
+    this._filmsSectionComponent.hide();
+    this._sortComponent.hide();
+  }
+
+  show() {
+    this._filmsSectionComponent.show();
+    this._sortComponent.show();
+  }
+
   render() {
 
     const cards = this._moviesModel.getCards();

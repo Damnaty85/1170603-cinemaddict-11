@@ -1,6 +1,6 @@
 import {FilterType} from "../const";
 
-export const getActive = (cards) => {
+export const getALL = (cards) => {
   return cards.filter((card) => card.id);
 };
 
@@ -19,7 +19,7 @@ export const getFavorite = (cards) => {
 export const getCardsByFilter = (cards, filterType) => {
   switch (filterType) {
     case FilterType.ALL:
-      return getActive(cards);
+      return getALL(cards);
     case FilterType.WATCHLIST:
       return getWatchlist(cards);
     case FilterType.HISTORY:

@@ -1,10 +1,22 @@
-import {getRandomIntegerNumber, getRandomArrayItem, getRandomDate, formatRuntime} from "../utils/common";
+import {getRandomIntegerNumber, getRandomArrayItem, getRandomDate} from "../utils/common";
 import {TITLES, DESCRIPTIONS, POSTERS, GENRES, DIRECTORS, WRITERS, ACTORS, COUNTRIES} from "../const";
 import {generateComments} from "./comment";
 
 const getRandomRating = (max, min) => `${getRandomIntegerNumber(max, min)}.${getRandomIntegerNumber(max, min)}`;
 
 const getRandomBoolean = () => (Math.random() > 0.5);
+
+
+function getRandomPeriodStats(start, end) {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
+
+const generateWatchingDate = () => {
+  const thisYear = new Date().getFullYear();
+
+  return getRandomPeriodStats(new Date(thisYear, 0, 1), new Date()).toISOString();
+};
+
 
 const generateCard = () => {
   const commentList = generateComments(getRandomIntegerNumber(20));
@@ -18,7 +30,7 @@ const generateCard = () => {
     commentList,
     age: `${getRandomIntegerNumber(18, 5)}+`,
     dateRelease: getRandomDate(),
-    duration: formatRuntime(getRandomIntegerNumber(200, 60)),
+    duration: getRandomIntegerNumber(200, 60),
     genres: GENRES.filter(getRandomBoolean).slice(1, 4),
     director: DIRECTORS[getRandomIntegerNumber(DIRECTORS.length)],
     writers: WRITERS.filter(getRandomBoolean).slice(0, getRandomIntegerNumber(4, 1)).join(`, `),
@@ -27,6 +39,7 @@ const generateCard = () => {
     isWatchlist: Math.random() > 0.5,
     isWatched: Math.random() > 0.5,
     isFavorite: Math.random() > 0.5,
+    watchingDate: generateWatchingDate(),
   };
 };
 
