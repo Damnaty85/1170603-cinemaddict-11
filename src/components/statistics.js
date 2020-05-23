@@ -33,7 +33,7 @@ const checkTotalDurationCount = (cards) => {
   }
 
   return cards
-    .map((card) => card.duration)
+    .map((card) => card.runtime)
     .reduce((acc, runtime) => acc + runtime);
 };
 

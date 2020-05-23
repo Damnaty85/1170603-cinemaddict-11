@@ -1,8 +1,5 @@
 import AbstractSmartComponent from "./abstract-smart-component";
-import {EMOJI_NAMES} from "../const";
-import {createCommentsTemplate} from "./comment";
-import {formatDate, formatDateComment, formatRuntime} from "../utils/common";
-import he from 'he';
+import {formatDate, formatRuntime} from "../utils/common";
 
 const createGenresMarkup = (genres) => {
   const title = genres.length > 1 ? `Genres` : `Genre`;
@@ -10,35 +7,18 @@ const createGenresMarkup = (genres) => {
   return (
     `<td class="film-details__term">${title}</td>
     <td class="film-details__cell">
-      ${genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(`\n`)}
+      ${genres.map((it) => `<span class="film-details__genre">${it}</span>`).join(`\n`)}
     </td >`
   );
 };
 
-const createAddEmojiMarkup = (emojiName) => {
-  return emojiName ? `<img src="./images/emoji/${emojiName}.png" width="55" height="55" alt="emoji-${emojiName}">` : ``;
-};
-
-const createEmojiListMarkup = (emojiName) => {
-  return EMOJI_NAMES.map((name) => {
-    const isChecked = emojiName === name;
-    return (
-      `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${name}" value="${name}" ${isChecked ? `checked` : ``}>
-        <label class="film-details__emoji-label" for="emoji-${name}">
-            <img src="./images/emoji/${name}.png" width="30" height="30" alt="emoji">
-        </label>`
-    );
-  }).join(`\n`);
-};
-
 const createFilmDetailCardTemplate = (card, option) => {
-  const {title, description, poster, age, director, actors, writers, duration, country, dateRelease, rating, genres, commentList} = card;
-  const {emojiName, isWatchlist, isWatched, isFavorite} = option;
-  const date = formatDate(dateRelease);
-  const runtime = formatRuntime(duration);
-  const commentCount = commentList.length;
+  const {title, alternativeTitle, totalRating, poster, ageRating, director, writers, actors, releaseDate, releaseCountry, runtime, genres, description} = card;
+  const {isWatchlist, isWatched, isFavorite} = option;
+  const dateRelease = formatDate(releaseDate);
+  const duration = formatRuntime(runtime);
 
-  const emojiListMarkup = createEmojiListMarkup(emojiName);
+  const genresMarkup = createGenresMarkup(genres);
 
   return (
     `<section class="film-details">
@@ -49,20 +29,20 @@ const createFilmDetailCardTemplate = (card, option) => {
       </div>
       <div class="film-details__info-wrap">
         <div class="film-details__poster">
-          <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
+          <img class="film-details__poster-img" src="${poster}" alt="">
 
-          <p class="film-details__age">${age}</p>
+          <p class="film-details__age">${ageRating}+</p>
         </div>
 
         <div class="film-details__info">
           <div class="film-details__info-head">
             <div class="film-details__title-wrap">
               <h3 class="film-details__title">${title}</h3>
-              <p class="film-details__title-original">Original: ${title}</p>
+              <p class="film-details__title-original">Original: ${alternativeTitle}</p>
             </div>
 
             <div class="film-details__rating">
-              <p class="film-details__total-rating">${rating}</p>
+              <p class="film-details__total-rating">${totalRating}</p>
             </div>
           </div>
 
@@ -82,18 +62,18 @@ const createFilmDetailCardTemplate = (card, option) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
-                  <td class="film-details__cell">${date}</td>
+                  <td class="film-details__cell">${dateRelease}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>
-                  <td class="film-details__cell">${runtime}</td>
+                  <td class="film-details__cell">${duration}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Country</td>
-                  <td class="film-details__cell">${country}</td>
+                  <td class="film-details__cell">${releaseCountry}</td>
                 </tr>
                 <tr class="film-details__row">
-                  ${createGenresMarkup(genres)}
+                  ${genresMarkup}
                 </tr>
               </table>
           </table>
@@ -117,23 +97,9 @@ const createFilmDetailCardTemplate = (card, option) => {
 
     <div class="form-details__bottom-container">
       <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentCount}</span></h3>
+      
 
-        <ul class="film-details__comments-list">
-        ${createCommentsTemplate(commentList)}
-        </ul>
-
-        <div class="film-details__new-comment">
-          <div for="add-emoji" class="film-details__add-emoji-label">${createAddEmojiMarkup(emojiName)}</div>
-
-          <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
-          </label>
-
-          <div class="film-details__emoji-list">
-           ${emojiListMarkup}
-          </div>
-        </div>
+        
       </section>
     </div>
   </form>
@@ -150,13 +116,7 @@ export default class CardDetail extends AbstractSmartComponent {
     this._isWatchlist = this._card.isWatchlist;
     this._isWatched = this._card.isWatched;
     this._isFavorite = this._card.isFavorite;
-
     this._buttonCloseHandler = null;
-    this._commentsDeleteClickHandler = null;
-    this._commentSubmitHandler = null;
-    this._emojiName = ``;
-
-    this._subscribeOnEvents();
   }
 
   getTemplate() {
@@ -164,7 +124,6 @@ export default class CardDetail extends AbstractSmartComponent {
       isWatchlist: this._isWatchlist,
       isWatched: this._isWatched,
       isFavorite: this._isFavorite,
-      emojiName: this._emojiName,
     });
   }
 
@@ -173,9 +132,6 @@ export default class CardDetail extends AbstractSmartComponent {
     this.setWatchlistButtonClickHandler(this._addWatchListHandler);
     this.setWatchedButtonClickHandler(this._markAsWatchedHandler);
     this.setFavoritesButtonClickHandler(this._favoriteHandler);
-    this.setCommentsDeleteClickHandler(this._commentsDeleteClickHandler);
-    this.setCommentSubmitHandler(this._commentSubmitHandler);
-    this._subscribeOnEvents();
   }
 
   rerender() {
@@ -187,51 +143,6 @@ export default class CardDetail extends AbstractSmartComponent {
       .addEventListener(`click`, handler);
     this._buttonCloseHandler = handler;
   }
-
-  _parseFormData(formData) {
-    return {
-      id: String(Math.random()),
-      emoji: this._emojiName,
-      commentText: he.encode(formData.get(`comment`)),
-      author: `you`,
-      date: formatDateComment(new Date()),
-    };
-  }
-
-  getAddCommentFormData() {
-    const form = this.getElement().querySelector(`.film-details__inner`);
-    const formData = new FormData(form);
-
-    return this._parseFormData(formData);
-  }
-
-  setCommentsDeleteClickHandler(handler) {
-    this.getElement().querySelectorAll(`.film-details__comment-delete`)
-      .forEach((deleteButton) => {
-        deleteButton.addEventListener(`click`, (evt) => {
-          evt.preventDefault();
-          const commentId = evt.target.closest(`li`).id;
-          handler(commentId);
-        });
-      });
-
-    this._commentsDeleteClickHandler = handler;
-  }
-
-  setCommentSubmitHandler(handler) {
-    this.getElement().querySelector(`.film-details__comment-input`)
-      .addEventListener(`keydown`, (evt) => {
-        const ctrlOrCommandKey = evt.ctrlKey || evt.metaKey;
-        const enterKey = evt.key === `Enter`;
-
-        if (ctrlOrCommandKey && enterKey) {
-          handler();
-        }
-      });
-
-    this._commentSubmitHandler = handler;
-  }
-
 
   setWatchlistButtonClickHandler(handler) {
     this._element.querySelector(`.film-details__control-label--watchlist`)
@@ -249,16 +160,5 @@ export default class CardDetail extends AbstractSmartComponent {
     this._element.querySelector(`.film-details__control-label--favorite`)
       .addEventListener(`click`, handler);
     this._favoriteHandler = handler;
-  }
-
-  _subscribeOnEvents() {
-    const element = this.getElement();
-
-    element.querySelector(`.film-details__emoji-list`)
-      .addEventListener(`change`, (evt) => {
-        this._emojiName = evt.target.value;
-
-        this.rerender();
-      });
   }
 }
