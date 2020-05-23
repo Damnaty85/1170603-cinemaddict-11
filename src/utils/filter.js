@@ -27,6 +27,5 @@ export const getCardsByFilter = (cards, filterType) => {
     case FilterType.FAVORITES:
       return getFavorite(cards);
   }
-
   return cards;
 };

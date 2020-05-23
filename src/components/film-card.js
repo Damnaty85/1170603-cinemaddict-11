@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract-component";
-import {formatYear, setShortDescription} from "../utils/common";
+import {formatRuntime, formatYear, setShortDescription} from "../utils/common";
 
 const createButtonCardControlMarkup = (name, controlClass, isActive = true) => {
   return (
@@ -8,27 +8,28 @@ const createButtonCardControlMarkup = (name, controlClass, isActive = true) => {
 };
 
 const createFilmCardTemplate = (card) => {
-  const {title, rating, dateRelease, duration, genres, poster, description, commentList} = card;
+  const {comments, title, totalRating, poster, releaseDate, runtime, genres, description} = card;
 
   const buttonAddWatchList = createButtonCardControlMarkup(`Add to watchlist`, `add-to-watchlist`, !card.isWatchlist);
   const buttonWatched = createButtonCardControlMarkup(`Mark as watched`, `mark-as-watched`, !card.isWatched);
   const buttonFavorite = createButtonCardControlMarkup(`Mark as favorite`, `favorite`, !card.isFavorite);
 
-  const date = formatYear(dateRelease);
-  const commentCount = commentList.length;
+  const dateRelease = formatYear(releaseDate);
+  const duration = formatRuntime(runtime);
+  const firstGenre = genres[0];
 
   return (
     `<article class="film-card">
             <h3 class="film-card__title">${title}</h3>
-            <p class="film-card__rating">${rating}</p>
+            <p class="film-card__rating">${totalRating}</p>
             <p class="film-card__info">
-                <span class="film-card__year">${date}</span>
+                <span class="film-card__year">${dateRelease}</span>
                 <span class="film-card__duration">${duration}</span>
-                <span class="film-card__genre">${genres[0]}</span>
+                <span class="film-card__genre">${firstGenre}</span>
             </p>
-            <img src="./images/posters/${poster}" alt="" class="film-card__poster">
+            <img src="${poster}" alt="" class="film-card__poster">
             <p class="film-card__description">${setShortDescription(description, 139)}</p>
-            <a class="film-card__comments">${commentCount} comments</a>
+            <a class="film-card__comments">${comments.length} comments</a>
             <form class="film-card__controls">
                 ${buttonAddWatchList}
                 ${buttonWatched}
