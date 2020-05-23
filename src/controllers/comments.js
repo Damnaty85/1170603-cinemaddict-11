@@ -63,9 +63,6 @@ export default class CommentController {
     this._formCommentComponent.setCommentSubmitHandler(() => {
       const formData = this._formCommentComponent.getAddCommentFormData();
       const newComment = parseFormData(formData);
-
-      this._formCommentComponent.blockInput(true);
-
       this._api.createComment(this._card.id, newComment)
         .then(() => {
           this._formCommentComponent.resetForm();
@@ -73,8 +70,6 @@ export default class CommentController {
           if (this._updateFilmCardHandler !== null) {
             this._updateFilmCardHandler(this._card);
           }
-
-          this._formCommentComponent.blockInput(false);
         });
     });
 
