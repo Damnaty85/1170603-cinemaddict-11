@@ -4,6 +4,8 @@ import CommentController from "./comments";
 import {render, replace, remove, RenderPosition} from "../utils/render.js";
 import CardModel from "../models/card";
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
 export const Mode = {
   DEFAULT: `default`,
   DETAIL: `detail`,
@@ -18,6 +20,7 @@ export default class CardController {
     this._onViewChange = onViewChange;
 
     this._mode = Mode.DEFAULT;
+    this._shake = this._shake.bind(this);
     this._cardComponent = null;
     this._cardDetailComponent = null;
     this._commentsContainer = null;
@@ -27,7 +30,7 @@ export default class CardController {
     this._onCommentsCountChange = this._onCommentsCountChange.bind(this);
   }
 
-  _watchListButtonClickHandler(data) {
+  _marWatchListButtonClickHandler(data) {
     const newMovie = CardModel.clone(data);
     newMovie.isWatchlist = !newMovie.isWatchlist;
 
@@ -56,10 +59,11 @@ export default class CardController {
     this._cardComponent = new CardComponent(card);
     this._cardDetailComponent = new CardDetailComponent(card);
 
-    this._commentsContainer = this._cardDetailComponent.getElement()
-      .querySelector(`.film-details__comments-wrap`);
+    this._commentsContainer = this._cardDetailComponent.getElement().querySelector(`.film-details__comments-wrap`);
 
     this._commentsController = new CommentController(this._commentsContainer, card);
+
+    this._commentsController.shake = this._shake;
 
     this._commentsController.onCommentsCountChangeHandler(this._onCommentsCountChange);
 
@@ -77,7 +81,7 @@ export default class CardController {
 
     this._cardComponent.setWatchlistButtonClickHandler((evt) => {
       evt.preventDefault();
-      this._watchListButtonClickHandler(card);
+      this._marWatchListButtonClickHandler(card);
     });
 
     this._cardComponent.setWatchedButtonClickHandler((evt) => {
@@ -91,7 +95,7 @@ export default class CardController {
     });
 
     this._cardDetailComponent.setWatchlistButtonClickHandler(() => {
-      this._watchListButtonClickHandler(card);
+      this._marWatchListButtonClickHandler(card);
     });
 
     this._cardDetailComponent.setWatchedButtonClickHandler(() => {
@@ -125,6 +129,15 @@ export default class CardController {
   destroy() {
     remove(this._cardDetailComponent);
     remove(this._cardComponent);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+  }
+
+  _shake() {
+    this._cardDetailComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+
+    setTimeout(() => {
+      this._cardDetailComponent.getElement().style.animation = ``;
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
   _onCommentsCountChange(card, updatedFilm) {
