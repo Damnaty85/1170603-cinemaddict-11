@@ -195,12 +195,16 @@ export default class PageController {
         if (isSuccess) {
 
           cardController.render(cardModel, Mode.DEFAULT);
-          this._updateCards(this._showingCardsCount);
+          // this._updateCards(this._showingCardsCount);
+
+          this._renderCommentedCards();
 
           cardController._commentsController.loadComments(newData.id);
         }
+      })
+      .catch(() => {
+        cardController._shake();
       });
-    this._renderCommentedCards();
   }
 
   _onCommentsDataChange(cardController, card) {
@@ -212,10 +216,11 @@ export default class PageController {
           cardController.render(cardModel, Mode.DEFAULT);
           cardController._commentsController.loadComments(card.id);
 
-          this._updateCards(this._showingCardsCount);
+          this._renderCommentedCards();
+
+          // this._updateCards(this._showingCardsCount);
         }
       });
-    this._renderCommentedCards();
   }
 
   _onSortTypeChange(sortType) {

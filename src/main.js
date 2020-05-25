@@ -9,7 +9,7 @@ import {render, RenderPosition} from "./utils/render";
 import {getWatched} from "./utils/filter";
 import {FilterType} from "./const";
 
-const AUTHORIZATION = `Basic 923i402763940-su-37`;
+const AUTHORIZATION = `Basic 923i402763940-mig-37`;
 const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
 
 const api = new API(END_POINT, AUTHORIZATION);
@@ -28,7 +28,7 @@ api.getCards()
     render(siteHeader, new RankComponent(getWatched(cards).length), RenderPosition.BEFOREEND);
 
     const filterController = new FilterController(siteMainElement, moviesModel);
-    filterController.render(cards);
+    filterController.render();
 
     const pageController = new PageController(siteMainElement, moviesModel, api);
     pageController.render(cards);

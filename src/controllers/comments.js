@@ -7,7 +7,6 @@ import he from "he";
 
 const parseFormData = (formData) => {
   return new CommentModel({
-    'author': `you`,
     'comment': he.encode(formData.get(`comment`)),
     'date': new Date().toISOString(),
     'emotion': formData.get(`comment-emoji`),
@@ -20,13 +19,19 @@ export default class CommentController {
     this._card = card;
 
     this._api = new API();
+    this._shake = null;
     this._updateFilmCardHandler = null;
     this._commentsComponent = null;
     this._comments = null;
     this._formCommentComponent = null;
+    this._addCommentFormTextField = null;
 
     this._onDataChange = this._onDataChange.bind(this);
     this._setCommentDelete = this._setCommentDelete.bind(this);
+  }
+
+  set shake(handler) {
+    this._shake = handler;
   }
 
   onCommentsCountChangeHandler(handler) {
@@ -59,16 +64,37 @@ export default class CommentController {
     const oldComponent = this._formCommentComponent;
 
     this._formCommentComponent = new FormCommentComponent();
+    this._addCommentFormTextField = this._formCommentComponent.getElement();
 
     this._formCommentComponent.setCommentSubmitHandler(() => {
       const formData = this._formCommentComponent.getAddCommentFormData();
       const newComment = parseFormData(formData);
+      const isCommentValid = this._validateComment(newComment);
+
+      if (!isCommentValid) {
+        this._addCommentFormTextField.classList.add(`_invalid`);
+
+        return;
+      }
+
+      this._addCommentFormTextField.classList.remove(`_invalid`);
+
+      this._formCommentComponent.blockInput(true);
+
       this._api.createComment(this._card.id, newComment)
         .then(() => {
           this._formCommentComponent.resetForm();
 
           if (this._updateFilmCardHandler !== null) {
             this._updateFilmCardHandler(this._card);
+          }
+
+          this._formCommentComponent.blockInput(false);
+        })
+        .catch(() => {
+          if (this._shake !== null) {
+            this._shake();
+            this._formCommentComponent.blockInput(false);
           }
         });
     });
@@ -111,6 +137,10 @@ export default class CommentController {
         this._commentsComponent.setDeleteButtonText(commentId, `delete`);
         this._blockDeleteButton(commentId, false);
       });
+  }
+
+  _validateComment({emotion, comment}) {
+    return !!emotion && !!comment;
   }
 
   loadComments(movieId) {

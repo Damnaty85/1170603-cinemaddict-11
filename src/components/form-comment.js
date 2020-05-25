@@ -18,7 +18,7 @@ const createFormCommentMarkup = () => {
   return (
     `<div class="film-details__new-comment">
           <div for="add-emoji" class="film-details__add-emoji-label"></div>
-
+          <span class="film-details__comment__error">Choose an emotion and fill in the field below</span>
           <label class="film-details__comment-label">
             <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
           </label>
@@ -72,6 +72,14 @@ export default class FormComment extends AbstractSmartComponent {
 
         emotionContainer.innerHTML = `<img src="./images/emoji/${selectedEmotion}.png" width="55" height="55" alt="emoji">`;
       });
+  }
+
+  blockInput(toBLock) {
+    const inputs = this.getElement().querySelectorAll(`input, textarea`);
+
+    inputs.forEach((input) => {
+      input.disabled = toBLock ? true : false;
+    });
   }
 
   resetForm() {
