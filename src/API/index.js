@@ -1,5 +1,5 @@
-import CardModel from "./models/card";
-import CommentModel from "./models/comment";
+import CardModel from "../models/card";
+import CommentModel from "../models/comment";
 
 const Method = {
   GET: `GET`,
@@ -18,9 +18,6 @@ const checkStatus = (response) => {
 
 export default class API {
   constructor(endPoint, authorization) {
-    if (API.instance instanceof API) {
-      return API.instance;
-    }
 
     this._endPoint = endPoint;
     this._authorization = authorization;
@@ -70,6 +67,16 @@ export default class API {
     })
       .then((response) => response.json())
       .then(CardModel.parseCard);
+  }
+
+  sync(data) {
+    return this._load({
+      url: `movies/sync`,
+      method: Method.POST,
+      body: JSON.stringify(data),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+      .then((response) => response.json());
   }
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {

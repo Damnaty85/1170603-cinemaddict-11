@@ -12,12 +12,13 @@ export const Mode = {
 };
 
 export default class CardController {
-  constructor(container, onDataChange, onViewChange, onCommentsDataChange) {
+  constructor(container, onDataChange, onViewChange, onCommentsDataChange, api) {
 
     this._container = container;
     this._onDataChange = onDataChange;
     this._onCommentsDataChange = onCommentsDataChange;
     this._onViewChange = onViewChange;
+    this._api = api;
 
     this._mode = Mode.DEFAULT;
     this._shake = this._shake.bind(this);
@@ -61,7 +62,7 @@ export default class CardController {
 
     this._commentsContainer = this._cardDetailComponent.getElement().querySelector(`.film-details__comments-wrap`);
 
-    this._commentsController = new CommentController(this._commentsContainer, card);
+    this._commentsController = new CommentController(this._commentsContainer, card, this._api);
 
     this._commentsController.shake = this._shake;
 

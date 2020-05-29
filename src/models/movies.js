@@ -38,6 +38,7 @@ export default class Movies {
     this._cards = [].concat(this._cards.slice(0, index), card, this._cards.slice(index + 1));
 
     this._callHandlers(this._dataChangeHandlers);
+
     return true;
   }
 

@@ -1,4 +1,3 @@
-import API from '../api';
 import CommentsComponent from "../components/comment";
 import FormCommentComponent from "../components/form-comment";
 import {render, replace, RenderPosition} from "../utils/render";
@@ -14,11 +13,11 @@ const parseFormData = (formData) => {
 };
 
 export default class CommentController {
-  constructor(container, card) {
+  constructor(container, card, api) {
     this._container = container;
     this._card = card;
 
-    this._api = new API();
+    this._api = api;
     this._shake = null;
     this._updateFilmCardHandler = null;
     this._commentsComponent = null;

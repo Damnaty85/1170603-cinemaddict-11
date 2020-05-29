@@ -3,10 +3,9 @@ import {FilterType} from "../const";
 
 const createFilterMarkup = (filterItem, isActive) => {
   const {name, count} = filterItem;
-  const link = name.toLowerCase();
   const activeFilter = isActive ? ` main-navigation__item--active` : ``;
   return (`
-  <a href="#${link === `all movies` ? link.slice(0, 3) : link}" id="${link === `all movies` ? link.slice(0, 3) : link}" class="main-navigation__item${activeFilter}">${name}${name === `All movies` ? `` : `<span class="main-navigation__item-count">${count}</span>`}</a>
+  <a href="#${name === `all movies` ? name.slice(0, 3) : name}" id="${name === `all movies` ? name.slice(0, 3) : name}" class="main-navigation__item${activeFilter}">${name}${name === `All movies` ? `` : `<span class="main-navigation__item-count">${count}</span>`}</a>
   `);
 };
 
@@ -34,6 +33,7 @@ export default class Filter extends AbstractComponent {
   }
 
   setFilterChangeHandler(handler) {
+
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
 
@@ -43,7 +43,9 @@ export default class Filter extends AbstractComponent {
 
         evt.target.classList.add(`main-navigation__item--active`);
 
-        handler(evt.target.id);
+        const filter = evt.target.id;
+
+        handler(filter);
       }
     });
   }

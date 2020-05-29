@@ -1,7 +1,7 @@
 import {FilterType} from "../const";
 
 export const getALL = (cards) => {
-  return cards.filter((card) => card.id);
+  return cards;
 };
 
 export const getWatchlist = (cards) => {
