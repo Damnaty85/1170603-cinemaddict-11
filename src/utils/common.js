@@ -19,25 +19,6 @@ export const formatRuntime = (number) => {
   return moment.duration(number, `minute`).format(`h[h] mm[m]`);
 };
 
-export const getRandomIntegerNumber = (max, min = 0) => {
-  return min + Math.floor(Math.random() * (max - min));
-};
-
-export const getRandomDate = (sign = -1) => {
-  const targetDate = new Date();
-  const diffValue = sign * getRandomIntegerNumber(3600000);
-
-  targetDate.setMinutes(targetDate.getMinutes() + diffValue);
-
-  return targetDate;
-};
-
-export const getRandomArrayItem = (array) => {
-  const randomIndex = getRandomIntegerNumber(0, array.length);
-
-  return array[randomIndex];
-};
-
 export const setShortDescription = (text, maxLength) => {
   let targetText = text;
   if (targetText.length > maxLength) {

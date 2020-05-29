@@ -33,6 +33,7 @@ const checkTotalDurationCount = (cards) => {
   }
 
   return cards
+    .filter((card) => card.isWatched)
     .map((card) => card.runtime)
     .reduce((acc, runtime) => acc + runtime);
 };
@@ -44,7 +45,7 @@ const getFavoriteGenre = (genres) => {
   const favoriteGenre = sortedGenres[0][0];
 
   if (cardsCountFirstFavoriteGenre === cardsCountSecondFavoriteGenre) {
-    return `–`;
+    return ``;
   }
 
   return favoriteGenre;
@@ -120,21 +121,21 @@ const createUserRankTemplate = (count) => {
   );
 };
 
-const createStatisticsTemplate = (watchedFilms) => {
+const createStatisticsTemplate = (films) => {
   const watchedFilmsCount = (cards) => {
     return cards.map((card) => card.isWatched).reduce((acc, runtime) => acc + runtime);
   };
 
-  const totalDurationCount = checkTotalDurationCount(watchedFilms);
+  const totalDurationCount = checkTotalDurationCount(films);
 
   const hours = Math.trunc(totalDurationCount / 60);
   const minutes = totalDurationCount % 60;
 
-  const favoriteGenre = getFavoriteGenre(getFilmsGenres(watchedFilms));
+  const favoriteGenre = getFavoriteGenre(getFilmsGenres(films));
 
   return (
     `<section class="statistic">
-      ${createUserRankTemplate(watchedFilmsCount(watchedFilms))}
+      ${createUserRankTemplate(watchedFilmsCount(films))}
       <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
         <p class="statistic__filters-description">Show stats:</p>
         <input type="radio" class="statistic__filters-input visually-hidden" name="statistic-filter" id="statistic-all-time" value="all-time" checked>
@@ -151,7 +152,7 @@ const createStatisticsTemplate = (watchedFilms) => {
       <ul class="statistic__text-list">
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">You watched</h4>
-          <p class="statistic__item-text">${watchedFilmsCount(watchedFilms)}<span class="statistic__item-description">movies</span></p>
+          <p class="statistic__item-text">${watchedFilmsCount(films)}<span class="statistic__item-description">movies</span></p>
         </li>
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">Total duration</h4>

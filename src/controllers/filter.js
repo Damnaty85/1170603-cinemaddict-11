@@ -39,10 +39,15 @@ export default class FilterController {
     } else {
       render(container, this._filterComponent, RenderPosition.BEFOREEND);
     }
+
+    if (this._handler) {
+      this.setScreenChange(this._handler);
+    }
   }
 
-  getFilterComponent() {
-    return this._filterComponent;
+  setScreenChange(handler) {
+    this._filterComponent.setFilterChangeHandler(handler);
+    this._handler = handler;
   }
 
   _onFilterChange(filterType) {
