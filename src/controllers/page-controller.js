@@ -31,7 +31,7 @@ const renderCards = (container, cards, onDataChange, onViewChange, onCommentsDat
 const renderExtraCard = (container, cards, sortingBy, onDataChange, onViewChange, onCommentsDataChange, api) => {
   const cardListExtraElement = container.querySelector(`.films-list__container`);
 
-  let showingExtraCardsCount = EXTRA_MOVIE_CARD_COUNT;
+  const showingExtraCardsCount = EXTRA_MOVIE_CARD_COUNT;
   cards
     .slice()
     .sort((a, b) => {
@@ -111,7 +111,7 @@ export default class PageController {
   }
 
   renderLoadingComponent() {
-    render(this._container, this._loadingComponent);
+    render(this._container, this._loadingComponent, RenderPosition.BEFOREEND);
   }
 
   render() {
