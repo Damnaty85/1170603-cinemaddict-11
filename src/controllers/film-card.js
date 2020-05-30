@@ -12,7 +12,7 @@ export const Mode = {
 };
 
 export default class CardController {
-  constructor(container, onDataChange, onViewChange, onCommentsDataChange, api) {
+  constructor(container, onDataChange, onCommentsDataChange, onViewChange, api) {
 
     this._container = container;
     this._onDataChange = onDataChange;
