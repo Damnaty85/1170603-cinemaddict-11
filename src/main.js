@@ -11,7 +11,7 @@ import {render, RenderPosition} from "./utils/render";
 import {getWatched} from "./utils/filter";
 import {FilterType} from "./const";
 
-const AUTHORIZATION = `Basic sjdnfkjsdnfkjsd`;
+const AUTHORIZATION = `Basic mfkalkmflkmflamf214`;
 const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
 const STORE_PREFIX = `cinemaaddict-localstorage`;
 const STORE_VER = `v1`;
@@ -29,6 +29,14 @@ const siteFooterStatistic = siteFooter.querySelector(`.footer__statistics`);
 
 const filterController = new FilterController(siteMainElement, moviesModel);
 const pageController = new PageController(siteMainElement, moviesModel, apiWithProvider);
+const statisticsComponent = new StatisticsComponent(moviesModel);
+
+filterController.render();
+
+render(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
+statisticsComponent.hide();
+
+pageController.renderLoadingComponent();
 
 apiWithProvider.getCards()
   .then((cards) => {
@@ -36,26 +44,21 @@ apiWithProvider.getCards()
 
     render(siteHeader, new RankComponent(getWatched(cards).length), RenderPosition.BEFOREEND);
 
-    filterController.render();
     pageController.render(cards);
-
-    const statisticsComponent = new StatisticsComponent(cards);
-    render(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
-    statisticsComponent.hide();
-
-    filterController.setScreenChange((filterType) => {
-      if (filterType === FilterType.STATISTIC) {
-        pageController.hide();
-        statisticsComponent.show();
-      } else {
-        pageController.show();
-        filterController._onFilterChange(filterType);
-        statisticsComponent.hide();
-      }
-    });
 
     render(siteFooterStatistic, new FilmCountComponent(cards.length), RenderPosition.BEFOREEND);
   });
+
+filterController.setScreenChange((filterType) => {
+  if (filterType === FilterType.STATISTIC) {
+    pageController.hide();
+    statisticsComponent.show();
+  } else {
+    pageController.show();
+    filterController._onFilterChange(filterType);
+    statisticsComponent.hide();
+  }
+});
 
 window.addEventListener(`online`, () => {
   document.title = document.title.replace(` [offline]`, ``);
@@ -66,12 +69,7 @@ window.addEventListener(`online`, () => {
 });
 
 window.addEventListener(`load`, () => {
-  navigator.serviceWorker.register(`/sw.js`)
-    .then(() => {
-      navigator.serviceWorker.ready.then((worker) => {
-        worker.sync.register(`syncdata`);
-      });
-    });
+  navigator.serviceWorker.register(`/sw.js`);
 });
 
 window.addEventListener(`offline`, () => {

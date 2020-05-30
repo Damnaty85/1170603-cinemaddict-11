@@ -1,10 +1,12 @@
 import {getCardsByFilter} from "../utils/filter.js";
+import {getStatisticCardsByTime, FilterStatisticType} from "../utils/statistic";
 import {FilterType} from "../const.js";
 
 export default class Movies {
   constructor() {
     this._cards = [];
     this._activeFilterType = FilterType.ALL;
+    this._filterStatisticType = FilterStatisticType.ALL_TIME;
 
     this._dataChangeHandlers = [];
     this._filterChangeHandlers = [];
@@ -16,6 +18,19 @@ export default class Movies {
 
   getCardsAll() {
     return this._cards;
+  }
+
+  get watchedFilms() {
+    return this._cards
+      .filter((film) => film.isWatched);
+  }
+
+  get statisticsFilms() {
+    return getStatisticCardsByTime(this.watchedFilms, this._filterStatisticType);
+  }
+
+  set statisticsFilms(filterStatisticType) {
+    this._filterStatisticType = filterStatisticType;
   }
 
   setCards(cards) {

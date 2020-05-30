@@ -3,14 +3,14 @@ import AbstractComponent from "./abstract-component";
 const userRanks = {
   novice: {
     min: 1,
-    max: 10
+    max: 7
   },
   fan: {
-    min: 11,
-    max: 20
+    min: 8,
+    max: 18
   },
   movieBuff: {
-    min: 21
+    min: 19
   }
 };
 

@@ -73,7 +73,7 @@ const createFilmDetailCardTemplate = (card, option) => {
                   <td class="film-details__cell">${releaseCountry}</td>
                 </tr>
                 <tr class="film-details__row">
-                  ${genresMarkup}
+                  ${genres.length !== 0 ? genresMarkup : ``}
                 </tr>
               </table>
           </table>

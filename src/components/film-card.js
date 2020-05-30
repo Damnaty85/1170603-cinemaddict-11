@@ -16,7 +16,7 @@ const createFilmCardTemplate = (card) => {
 
   const dateRelease = formatYear(releaseDate);
   const duration = formatRuntime(runtime);
-  const firstGenre = genres[0];
+  const firstGenre = genres.length !== 0 ? genres[0] : ``;
 
   return (
     `<article class="film-card">
