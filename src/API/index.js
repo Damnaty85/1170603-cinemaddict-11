@@ -16,13 +16,11 @@ const checkStatus = (response) => {
   }
 };
 
-export default class API {
+export default class Api {
   constructor(endPoint, authorization) {
 
     this._endPoint = endPoint;
     this._authorization = authorization;
-
-    API.instance = this;
   }
 
   getCards() {
@@ -48,7 +46,7 @@ export default class API {
       headers: new Headers({'Content-Type': `application/json`})
     })
       .then((response) => response.json())
-      .then(CommentModel.parseComment);
+      .then(CommentModel.parse);
   }
 
   deleteComment(id) {
@@ -66,7 +64,7 @@ export default class API {
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then((response) => response.json())
-      .then(CardModel.parseCard);
+      .then(CardModel.parse);
   }
 
   sync(data) {

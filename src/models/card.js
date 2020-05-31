@@ -21,12 +21,12 @@ export default class Card {
     this.isFavorite = Boolean(data.user_details.favorite);
   }
 
-  static parseCard(result) {
+  static parse(result) {
     return new Card(result);
   }
 
   static parseCards(result) {
-    return result.map(Card.parseCard);
+    return result.map(Card.parse);
   }
 
   toRAW() {

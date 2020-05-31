@@ -25,14 +25,13 @@ export default class FilterController {
       return {
         name: filterType,
         count: getCardsByFilter(allCards, filterType).length,
-        active: filterType === this._activeFilterType,
+        isActive: filterType === this._activeFilterType,
       };
     });
-    const oldComponent = this._filterComponent;
 
+    const oldComponent = this._filterComponent;
     this._filterComponent = new FilterComponent(filters);
     this._filterComponent.setFilterChangeHandler(this._onFilterChange);
-
 
     if (oldComponent) {
       replace(this._filterComponent, oldComponent);

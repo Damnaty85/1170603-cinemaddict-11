@@ -26,7 +26,7 @@ const createCommentTemplate = (commentData, isClicked, modifiedDeleteButtonText)
 const createCommentsMarkup = (comments, options = {}) => {
   const {modifiedDeleteButtonText, selectedId} = options;
   const commentsList = comments.map((comment) => {
-    const isClicked = selectedId === comment.id ? true : false;
+    const isClicked = selectedId === comment.id;
 
     return createCommentTemplate(comment, isClicked, modifiedDeleteButtonText);
   })

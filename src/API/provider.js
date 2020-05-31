@@ -34,7 +34,7 @@ export default class Provider {
       });
     }
 
-    const fakeUpdatedMovie = CardModel.parseCard(Object.assign({}, movie.toRAW(), {id}));
+    const fakeUpdatedMovie = CardModel.parse(Object.assign({}, movie.toRAW(), {id}));
 
     this._isSynchronized = false;
 

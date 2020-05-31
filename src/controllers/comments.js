@@ -116,7 +116,7 @@ export default class CommentController {
       return;
     }
 
-    button.disabled = toBLock ? true : false;
+    button.disabled = !!toBLock;
   }
 
   _setCommentDelete(commentId) {

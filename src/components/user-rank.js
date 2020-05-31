@@ -1,27 +1,27 @@
 import AbstractComponent from "./abstract-component";
 
-const userRanks = {
-  novice: {
+const UserRank = {
+  NOVICE: {
     min: 1,
     max: 7
   },
-  fan: {
+  FAN: {
     min: 8,
     max: 18
   },
-  movieBuff: {
+  MOVIE_BUFF: {
     min: 19
   }
 };
 
 export const getUserRank = (moviesWatched) => {
-  if (moviesWatched >= userRanks.novice.min && moviesWatched <= userRanks.novice.max) {
+  if (moviesWatched >= UserRank.NOVICE.min && moviesWatched <= UserRank.NOVICE.max) {
     return `Novice`;
   }
-  if (moviesWatched >= userRanks.fan.min && moviesWatched <= userRanks.fan.max) {
+  if (moviesWatched >= UserRank.FAN.min && moviesWatched <= UserRank.FAN.max) {
     return `Fan`;
   }
-  if (moviesWatched >= userRanks.movieBuff.min) {
+  if (moviesWatched >= UserRank.MOVIE_BUFF.min) {
     return `Movie buff`;
   }
 

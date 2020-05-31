@@ -4,6 +4,9 @@ import CommentController from "./comments";
 import {render, replace, remove, RenderPosition} from "../utils/render.js";
 import CardModel from "../models/card";
 
+const ESCAPE_KEY = `Escape`;
+const ESC_KEY = `Esc`;
+const ONE_SECOND = 1000;
 const SHAKE_ANIMATION_TIMEOUT = 600;
 
 export const Mode = {
@@ -32,6 +35,7 @@ export default class CardController {
   }
 
   _marWatchListButtonClickHandler(data) {
+
     const newMovie = CardModel.clone(data);
     newMovie.isWatchlist = !newMovie.isWatchlist;
 
@@ -134,7 +138,7 @@ export default class CardController {
   }
 
   _shake() {
-    this._cardDetailComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    this._cardDetailComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / ONE_SECOND}s`;
 
     setTimeout(() => {
       this._cardDetailComponent.getElement().style.animation = ``;
@@ -165,7 +169,7 @@ export default class CardController {
   }
 
   _onEscKeyDown(evt) {
-    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+    const isEscKey = evt.key === ESCAPE_KEY || evt.key === ESC_KEY;
 
     if (isEscKey) {
       this._buttonCloseHandler();

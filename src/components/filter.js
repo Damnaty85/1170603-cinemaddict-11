@@ -1,8 +1,8 @@
 import AbstractComponent from "./abstract-component";
 import {FilterType} from "../const";
 
-const createFilterMarkup = (filterItem, isActive) => {
-  const {name, count} = filterItem;
+const createFilterMarkup = (filterItem) => {
+  const {name, count, isActive} = filterItem;
   const activeFilter = isActive ? ` main-navigation__item--active` : ``;
   return (`
   <a href="#${name === `all movies` ? name.slice(0, 3) : name}" id="${name === `all movies` ? name.slice(0, 3) : name}" class="main-navigation__item${activeFilter}">${name}${name === `All movies` ? `` : `<span class="main-navigation__item-count">${count}</span>`}</a>
@@ -10,7 +10,7 @@ const createFilterMarkup = (filterItem, isActive) => {
 };
 
 const createFilterTemplate = (filters) => {
-  const filterMarkup = filters.map((it, i) => createFilterMarkup(it, i === 0)).slice(0, -1).join(`\n`);
+  const filterMarkup = filters.map((it) => createFilterMarkup(it)).slice(0, -1).join(`\n`);
   return (
     `<nav class="main-navigation">
         <div class="main-navigation__items">

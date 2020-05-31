@@ -15,11 +15,11 @@ export default class Comment {
     };
   }
 
-  static parseComment(comment) {
+  static parse(comment) {
     return new Comment(comment);
   }
 
   static parseComments(comment) {
-    return comment.map(Comment.parseComment);
+    return comment.map(Comment.parse);
   }
 }

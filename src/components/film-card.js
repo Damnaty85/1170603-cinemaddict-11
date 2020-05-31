@@ -1,6 +1,8 @@
 import AbstractComponent from "./abstract-component";
 import {formatRuntime, formatYear, setShortDescription} from "../utils/common";
 
+const MAX_CHARS_COUNT = 139;
+
 const createButtonCardControlMarkup = (name, controlClass, isActive = true) => {
   return (
     `<button class="film-card__controls-item button film-card__controls-item--${controlClass} ${isActive ? `` : `film-card__controls-item--active`}">${name}</button>`
@@ -28,7 +30,7 @@ const createFilmCardTemplate = (card) => {
                 <span class="film-card__genre">${firstGenre}</span>
             </p>
             <img src="${poster}" alt="" class="film-card__poster">
-            <p class="film-card__description">${setShortDescription(description, 139)}</p>
+            <p class="film-card__description">${setShortDescription(description, MAX_CHARS_COUNT)}</p>
             <a class="film-card__comments">${comments.length} comments</a>
             <form class="film-card__controls">
                 ${buttonAddWatchList}
