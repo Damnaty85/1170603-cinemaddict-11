@@ -16,7 +16,7 @@ const checkStatus = (response) => {
   }
 };
 
-export default class Api {
+export default class API {
   constructor(endPoint, authorization) {
 
     this._endPoint = endPoint;
@@ -29,13 +29,13 @@ export default class Api {
     })
       .then(checkStatus)
       .then((response) => response.json())
-      .then(CardModel.parseCards);
+      .then(CardModel.parseAll);
   }
 
   getComments(movieId) {
     return this._load({url: `comments/${movieId}`})
       .then((response) => response.json())
-      .then(CommentModel.parseComments);
+      .then(CommentModel.parseAll);
   }
 
   createComment(movieId, comment) {

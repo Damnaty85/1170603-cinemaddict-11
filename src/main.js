@@ -1,4 +1,4 @@
-import Api from "./api/index";
+import API from "./api/index";
 import Store from "./api/store.js";
 import Provider from "./api/provider";
 import RankComponent from "./components/user-rank";
@@ -17,7 +17,7 @@ const STORE_PREFIX = `cinemaaddict-localstorage`;
 const STORE_VER = `v1`;
 const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
-const api = new Api(END_POINT, AUTHORIZATION);
+const api = new API(END_POINT, AUTHORIZATION);
 const store = new Store(STORE_NAME, window.localStorage);
 const apiWithProvider = new Provider(api, store);
 const moviesModel = new MoviesModel();

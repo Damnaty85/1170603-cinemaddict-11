@@ -25,7 +25,7 @@ export default class Card {
     return new Card(result);
   }
 
-  static parseCards(result) {
+  static parseAll(result) {
     return result.map(Card.parse);
   }
 
