@@ -1,8 +1,10 @@
-import CommentsComponent from "../components/comment";
+import CommentsComponent, {TEXT_DELETE} from "../components/comment";
 import FormCommentComponent from "../components/form-comment";
 import {render, replace, RenderPosition} from "../utils/render";
 import CommentModel from "../models/comment";
 import he from "he";
+
+const TEXT_PROCESS_DELETE = `Deleting...`;
 
 const parseFormData = (formData) => {
   return new CommentModel({
@@ -45,7 +47,7 @@ export default class CommentController {
     this._commentsComponent = new CommentsComponent(this._comments);
 
     this._commentsComponent.setCommentsDeleteClickHandler((commentId) => {
-      this._commentsComponent.setDeleteButtonText(commentId, `Deleting...`);
+      this._commentsComponent.setDeleteButtonText(commentId, TEXT_PROCESS_DELETE);
       this._blockDeleteButton(commentId, true);
       this._setCommentDelete(commentId);
     });
@@ -133,7 +135,7 @@ export default class CommentController {
         this.loadComments(this._card.id);
       })
       .catch(() => {
-        this._commentsComponent.setDeleteButtonText(commentId, `delete`);
+        this._commentsComponent.setDeleteButtonText(commentId, TEXT_DELETE);
         this._blockDeleteButton(commentId, false);
       });
   }

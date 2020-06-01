@@ -1,10 +1,12 @@
 import AbstractSmartComponent from "./abstract-smart-component";
 import {formatDateComment} from "../utils/common";
 
+export const TEXT_DELETE = `Delete`;
+
 const createCommentTemplate = (commentData, isClicked, modifiedDeleteButtonText) => {
   const {id, author, comment, date, emotion} = commentData;
   const commentDate = formatDateComment(date);
-  const deleteButtonText = isClicked ? modifiedDeleteButtonText : `Delete`;
+  const deleteButtonText = isClicked ? modifiedDeleteButtonText : TEXT_DELETE;
 
   return (
     `<li class="film-details__comment">
@@ -26,7 +28,7 @@ const createCommentTemplate = (commentData, isClicked, modifiedDeleteButtonText)
 const createCommentsMarkup = (comments, options = {}) => {
   const {modifiedDeleteButtonText, selectedId} = options;
   const commentsList = comments.map((comment) => {
-    const isClicked = selectedId === comment.id;
+    const isClicked = selectedId === comment;
 
     return createCommentTemplate(comment, isClicked, modifiedDeleteButtonText);
   })
@@ -45,7 +47,7 @@ export default class Comments extends AbstractSmartComponent {
     super();
 
     this._comments = comments;
-    this._modifiedDeleteButtonText = `Delete`;
+    this._modifiedDeleteButtonText = TEXT_DELETE;
     this._selectedId = null;
   }
 

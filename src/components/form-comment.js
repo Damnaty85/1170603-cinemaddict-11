@@ -78,7 +78,7 @@ export default class FormComment extends AbstractSmartComponent {
     const inputs = this.getElement().querySelectorAll(`input, textarea`);
 
     inputs.forEach((input) => {
-      input.disabled = toBLock ? true : false;
+      input.disabled = toBLock;
     });
   }
 
